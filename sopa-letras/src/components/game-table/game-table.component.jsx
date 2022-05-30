@@ -32,33 +32,118 @@ function GameTable() {
         );
     }
   
+    function colocaPalavraTabelaJogo(){
+      const nLinhas = nLinhasDificuldade[dificuldadeAtual-1];
+  
+      let linha = getRandomNumber(nLinhas);
+      let coluna = getRandomNumber(nLinhas);
+  
+      let novaPalavra = true;
+      let palavra = "";
+
+      while(true){
+        palavra = getRandomWord();
+
+        for (let index = 0; index < palavrasEmJogo.length; index++)
+          if(palavrasEmJogo[index][0] === palavra){
+            novaPalavra = false;
+            break;
+          }
+          
+        if(novaPalavra)
+          break;
+      }
+      const orientacao = getRandomNumber(8);
+
+      palavrasEmJogo.push([palavra, linha, coluna, orientacao]);
+  
+      switch (orientacao) {
+        case 0:
+          // esquerda direita
+          for (let index = 0; index < palavra.length; index++) {
+            tabelaJogo[linha][coluna+index] = palavra[index];
+          }
+          break;
+        case 1:
+          // direita esquerda
+          for (let index = 0; index < palavra.length; index++) {
+            if(coluna-palavra.length <= 0)
+              coluna = palavra.length;
+            tabelaJogo[linha][coluna-index] = palavra[index];
+          }
+          break;
+        case 2:
+          // cima baixo
+          for (let index = 0; index < palavra.length; index++) {
+            tabelaJogo[linha+index][coluna] = palavra[index];
+          }
+          break;
+        case 3:
+          // baixo cima
+          for (let index = 0; index < palavra.length; index++) {
+            if(linha-palavra.length <= 0)
+              linha = palavra.length;
+            tabelaJogo[linha-index][coluna] = palavra[index];
+          }
+          break;
+        case 4:
+          // diagonal esquerda cima -> direita baixo
+          for (let index = 0; index < palavra.length; index++) {
+            tabelaJogo[linha+index][coluna+index] = palavra[index];
+          }
+          break;
+        case 5:
+          // diagonal direita baixo -> esquerda cima
+          for (let index = 0; index < palavra.length; index++) {
+            
+            if(linha-palavra.length <= 0)
+              linha = palavra.length;
+
+            if(coluna-palavra.length <= 0)
+              coluna = palavra.length;
+
+            tabelaJogo[linha-index][coluna-index] = palavra[index];
+          }
+          break;
+        case 6:
+          // diagonal direita cima -> esquerda baixo
+          for (let index = 0; index < palavra.length; index++) {
+            
+            if(coluna-palavra.length <= 0)
+              coluna = palavra.length;
+
+            tabelaJogo[linha+index][coluna-index] = palavra[index];
+          }
+          break;
+        case 7:
+          // diagonal esquerda baixo -> direita cima
+          for (let index = 0; index < palavra.length; index++) {
+            
+            if(linha-palavra.length <= 0)
+              linha = palavra.length;
+
+            tabelaJogo[linha-index][coluna+index] = palavra[index];
+          }
+          break;
+          default:
+            // esquerda direita
+            for (let index = 0; index < palavra.length; index++) {
+              tabelaJogo[linha][coluna+index] = palavra[index];
+            }
+      }
+
+    }
+
     function colocaPalavrasTabelaJogo(){
       
-      function colocaPalavraTabelaJogo(){
-        const nLinhas = nLinhasDificuldade[dificuldadeAtual-1];
-    
-        const linha = getRandomNumber(nLinhas);
-        const coluna = getRandomNumber(nLinhas);
-    
-        const palavra = getRandomWord();
-        const orientacao = 1;
-  
-        palavrasEmJogo.push([palavra, linha, coluna, orientacao]);
-    
-        for (let index = 0; index < palavra.length; index++) {
-          tabelaJogo[linha][coluna+index] = palavra[index];
-        }
-      }
-  
       palavrasEmJogo = [];
-  
+      preencheTabelaJogoComLetrasRandom();
+
       for (let index = 0; index < nPalavrasDificuldade[dificuldadeAtual-1]; index++) {
         colocaPalavraTabelaJogo();
       }
     }
     
-  
-    preencheTabelaJogoComLetrasRandom();
     colocaPalavrasTabelaJogo();
 
     //TODO: algoritmo meter palavras no mapa de jogo

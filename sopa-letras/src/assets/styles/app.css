@@ -12,7 +12,7 @@
     color: grey;
     box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.3);
     align-items: center;
-    width: 500px;
+    width: 650px;
     min-width: 450px;
     border-radius: 10px;
   }
@@ -71,6 +71,7 @@
 
 table, th, td {
   border: 1px solid;
+  padding: 5px;
 }
 
 table {

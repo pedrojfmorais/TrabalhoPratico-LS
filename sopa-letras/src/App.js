@@ -10,9 +10,6 @@ import {
 
 function App() {
 
-  
-  let timerId = undefined;
-  
   const [gameStarted, setGameStarted] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState("0");
   const [tabelaJogo, setTabelaJogo] = useState([[]]);
@@ -20,6 +17,10 @@ function App() {
   const [timer, setTimer] = useState(20);
 
   useEffect(() => { 
+    
+  let timerId = undefined;
+  let tempoDificuldade = [20, 40, 60]
+  
     if (gameStarted) { 
       timerId = setInterval(() => { 
         setTimer(timer-1); 
@@ -28,15 +29,15 @@ function App() {
           setGameStarted(false); 
         } 
       }, 1000); 
-    } else if (timer !== 20) { 
-      setTimer(20); 
+    } else if (timer !== tempoDificuldade[parseInt(selectedLevel)-1]) { 
+      setTimer(tempoDificuldade[parseInt(selectedLevel)-1]); 
     } 
     return () => { 
       if (timerId) { 
         clearInterval(timerId); 
       } 
     }; 
-  }, [gameStarted, timer]);
+  }, [gameStarted, timer, selectedLevel]);
 
   const handleGameStart = () => {
     if (gameStarted) {

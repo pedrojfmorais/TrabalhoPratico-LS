@@ -1,8 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 
-function GameTable(props) {
+const GameTable = memo((props) => {
 
-  let { gameStarted, tabelaJogo, palavrasEmJogo, onPalavraSelecionada } = props;
+  let { gameStarted, tabelaJogo, palavrasEmJogo} = props;
 
   //Se não tiver palavras em jogo não coloca as tabelas
   if(Object.keys(palavrasEmJogo).length === 0)
@@ -25,6 +25,35 @@ function GameTable(props) {
     mouseDown=false;
     onPalavraSelecionada(palavraSelecionada);
     palavraSelecionada = "";
+  }
+
+  const onPalavraSelecionada = (palavra) => {
+
+    let palavraCerta = false;
+    let inversa = palavra.split("").reverse().join("");
+
+    for (const element of palavrasEmJogo) {
+      
+      if(palavra === element || inversa === element){
+        palavraCerta = true;
+        break;
+      }
+    }
+    
+    let elements=document.getElementsByClassName("highlighted");
+
+    if(palavraCerta){
+      for (let index = 0; index < elements.length; index++) {
+        elements[index].classList.add("palavraCerta");
+      }
+    }
+
+    Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
+
+    //TODO: 
+    // riscar ou remover palavra das palavras em jogo
+    //  verificar direção da seleção
+    //   condição de fim de jogo
   }
 
   return (
@@ -67,5 +96,5 @@ function GameTable(props) {
       <br></br>
     </div>
   );
-}
+});
 export default GameTable;

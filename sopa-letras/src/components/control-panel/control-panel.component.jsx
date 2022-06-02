@@ -2,7 +2,7 @@ import React from "react";
 import "./control-panel.css";
 
 function ControlPanel(props) {
-  const { gameStarted, selectedLevel, onGameStart, onLevelChange, timer } = props;
+  const { gameStarted, selectedLevel, onGameStart, onLevelChange, timer, points } = props;
   const gameStartedClass = gameStarted ? " gameStarted" : "";
 
   return (
@@ -42,7 +42,7 @@ function ControlPanel(props) {
         </dl>
         <dl className={`list-item right${gameStartedClass}`}>
           <dt>Pontuação:</dt>
-          <dd id="points">0</dd>
+          <dd id="points">{points}</dd>
         </dl>
       </div>
     </section>

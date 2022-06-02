@@ -2,7 +2,7 @@ import React, { memo } from "react";
 
 const GameTable = memo((props) => {
 
-  let { gameStarted, tabelaJogo, palavrasEmJogo, setPalavrasEncontradas } = props;
+  let { gameStarted, tabelaJogo, palavrasEmJogo, setPalavrasEncontradas, setEncontrouPalavra } = props;
 
   //Se não tiver palavras em jogo não coloca a tabela
   if(Object.keys(palavrasEmJogo).length === 0)
@@ -37,6 +37,10 @@ const GameTable = memo((props) => {
       
       if(palavra === element || inversa === element){
         palavraCerta = true;
+
+        //caso ela esteja invertida fica direita
+        palavra = element;
+
         break;
       }
     }
@@ -49,14 +53,15 @@ const GameTable = memo((props) => {
       }
       palavrasEncontradas.push(palavra);
       setPalavrasEncontradas(palavrasEncontradas);
+      setEncontrouPalavra(true);
     }
 
     Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
 
     //TODO: 
-    // adicionar pontos ao acertar palavra, (tempo atual * numero de letras) é o numero de pontos a adicionar
-    //  verificar direção da seleção
-    //   condição de fim de jogo
+    // verificar direção da seleção
+    //  condição de fim de jogo
+    //   utilizador inserir a palavras a procurar
   }
 
   return (

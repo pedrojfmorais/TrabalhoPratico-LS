@@ -1,5 +1,6 @@
 import "./assets/styles/app.css"
 import { useState, useEffect } from "react";
+import initTabelaPalavras from "./components/game-table/initTabelaPalavras";
 
 import {
   Header,
@@ -9,6 +10,8 @@ import {
   GameTable,
 } from "./components";
 
+import { TEMPO_DIFICULDADE } from "./constants";
+
 function App() {
 
   const [gameStarted, setGameStarted] = useState(false);
@@ -16,13 +19,25 @@ function App() {
   const [tabelaJogo, setTabelaJogo] = useState([[]]);
   const [palavrasEmJogo, setPalavrasEmJogo] = useState([]);
   const [palavrasEncontradas, setPalavrasEncontradas] = useState([]);
+  const [encontrouPalavra, setEncontrouPalavra] = useState(false);
+  const [points, setPoints] = useState(0);
   const [timer, setTimer] = useState(20);
 
   useEffect(() => { 
     
-  let timerId = undefined;
-  let tempoDificuldade = [120, 90, 60]
-  
+    let timerId = undefined;
+    
+    //atualizar pontos
+    if(encontrouPalavra){
+      setPoints(points + (palavrasEncontradas[palavrasEncontradas.length-1].length * timer));
+      setEncontrouPalavra(false);
+    }
+
+    //deteta fim do jogo
+    if(palavrasEmJogo.length === palavrasEncontradas.length){
+      setGameStarted(false);
+    }
+    
     if (gameStarted) { 
       timerId = setInterval(() => { 
         setTimer(timer-1); 
@@ -31,15 +46,15 @@ function App() {
           setGameStarted(false); 
         } 
       }, 1000); 
-    } else if (timer !== tempoDificuldade[parseInt(selectedLevel)-1]) { 
-      setTimer(tempoDificuldade[parseInt(selectedLevel)-1]); 
+    } else if (timer !== TEMPO_DIFICULDADE[parseInt(selectedLevel)-1]) { 
+      setTimer(TEMPO_DIFICULDADE[parseInt(selectedLevel)-1]); 
     } 
     return () => { 
       if (timerId) { 
         clearInterval(timerId); 
       } 
     }; 
-  }, [gameStarted, timer, selectedLevel]);
+  }, [gameStarted, timer, points, selectedLevel, palavrasEmJogo, palavrasEncontradas, encontrouPalavra ]);
 
   const handleGameStart = () => {
     if (gameStarted) {
@@ -50,228 +65,17 @@ function App() {
     }
   };
 
-  function initJogo(_dificuldadeAtual){
+  function initJogo(dificuldadeAtual){
 
-    let dificuldadeAtual = parseInt(_dificuldadeAtual);
-
-    Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
-    Array.from(document.querySelectorAll('.palavraCerta')).forEach((el) => el.classList.remove('palavraCerta'));
-
-    const palavrasPossiveis = ['REACT', 'JAVASCRIPT', 'HTML', 'CSS', 'BACKBONE', 'ANGULAR', 'SVELTE', 'EMBER', 'BOOTSTRAP', 'VUE', 'JAVA', 'PYTHON', 'SQL']; 
-    
-    const nPalavrasDificuldade = [5, 7, 9];
-    const nLinhasDificuldade = [10, 15, 20];
-    let tabelaJogoTemp = [[]];
+    let tabelaJogo = [[]];
     let palavrasEmJogo = [];
 
-    function getRandomNumber(max){
-      return Math.floor(Math.random() * max);
-    }
-
-    function generateRandomLetter() {
-      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      return characters.charAt(getRandomNumber(characters.length));
-    }
+    [tabelaJogo, palavrasEmJogo] = initTabelaPalavras(parseInt(dificuldadeAtual));
     
-    function getRandomWord() {
-      return palavrasPossiveis[getRandomNumber(palavrasPossiveis.length)];
-    }
-    
-    function preencheTabelaJogoComLetrasRandom(){
-      tabelaJogoTemp = [[]];
-      tabelaJogoTemp = Array(nLinhasDificuldade[dificuldadeAtual-1]).fill(0).map( 
-        () => new Array(nLinhasDificuldade[dificuldadeAtual-1]).fill(0).map( 
-          () => generateRandomLetter()
-          )
-        );
-    }
-
-    function geraPalavrasRandom(){
-
-      let palavras = [];
-
-      let novaPalavra = true;
-
-      for (let i = 0; i < nPalavrasDificuldade[dificuldadeAtual-1]; i++) {
-        let palavra = getRandomWord();
-
-        while(true){
-          novaPalavra = true;
-          for (let index = 0; index < palavras.length; index++)
-            if(palavras[index] === palavra || palavra.length > nLinhasDificuldade[dificuldadeAtual-1]){
-              novaPalavra = false;
-              palavra = getRandomWord();
-              break;
-            }
-            
-          if(novaPalavra)
-            break;
-          
-        }
-
-        palavras.push(palavra);
-      }
-      return palavras;
-    }
-
-    function geraComoColocarNaTabela(palavras){
-
-      let palavrasEmJogoDados = [];
-      let celulasOcupadas = [];
-
-      palavras.forEach(palavra => {
-
-        const nLinhas = nLinhasDificuldade[dificuldadeAtual-1];
-
-        let linha = getRandomNumber(nLinhas);
-        let coluna = getRandomNumber(nLinhas);
-        
-        let orientacao = getRandomNumber(8);
-
-        while (true) {
-          
-          let conseguiuColocar = true;
-          let celulasOcupadasParaEste = [];
-      
-          linha = getRandomNumber(nLinhas);
-          coluna = getRandomNumber(nLinhas);
-          
-          orientacao = getRandomNumber(8);
-      
-          if(orientacao % 2 === 0)
-            palavra = palavra.split("").reverse().join("");
-
-          orientacao = Math.floor(orientacao / 2);
-          
-          switch (orientacao) {
-            case 1:
-              // cima baixo
-
-              if(linha + palavra.length >= nLinhasDificuldade[dificuldadeAtual-1])
-                linha = nLinhasDificuldade[dificuldadeAtual-1] - palavra.length;
-
-              for (let index = 0; index < palavra.length; index++)
-                celulasOcupadasParaEste.push([linha+index, coluna]);
-              break;
-
-            case 2:
-              // diagonal esquerda cima -> direita baixo
-
-              if(linha + palavra.length >= nLinhasDificuldade[dificuldadeAtual-1])
-                linha = nLinhasDificuldade[dificuldadeAtual-1] - palavra.length;
-
-              if(coluna + palavra.length >= nLinhasDificuldade[dificuldadeAtual-1])
-                coluna = nLinhasDificuldade[dificuldadeAtual-1] - palavra.length;
-                
-              for (let index = 0; index < palavra.length; index++)
-                celulasOcupadasParaEste.push([linha+index, coluna+index]);
-              break;
-
-            case 3:
-              // diagonal esquerda baixo -> direita cima
-              
-              if(linha - palavra.length <= -1)
-                linha = palavra.length - 1; // porque o index começa em 0
-
-              if(coluna + palavra.length >= nLinhasDificuldade[dificuldadeAtual-1])
-                coluna = nLinhasDificuldade[dificuldadeAtual-1] - palavra.length;
-
-                  
-              for (let index = 0; index < palavra.length; index++) 
-                celulasOcupadasParaEste.push([linha-index, coluna+index]);
-              break;
-
-            default:
-              // esquerda direita
-
-              if(coluna + palavra.length >= nLinhasDificuldade[dificuldadeAtual-1])
-                coluna = nLinhasDificuldade[dificuldadeAtual-1] - palavra.length;
-
-              for (let index = 0; index < palavra.length; index++)
-                celulasOcupadasParaEste.push([linha, coluna+index]);
-              break;
-          }
-        
-          for (let index_palavra = 0; index_palavra < celulasOcupadas.length; index_palavra++) {
-            for (let index = 0; index < celulasOcupadas[index_palavra].length; index++) {
-              for (let index_celulas_este = 0; index_celulas_este < celulasOcupadasParaEste.length; index_celulas_este++) {
-                
-                if(celulasOcupadas[index_palavra][index][0] === celulasOcupadasParaEste[index_celulas_este][0] &&
-                    celulasOcupadas[index_palavra][index][1] === celulasOcupadasParaEste[index_celulas_este][1]){
-                  conseguiuColocar = false;
-                  break;
-                }
-              }
-              if(conseguiuColocar === false)
-                break;
-            }
-            if(conseguiuColocar === false)
-              break;
-          }
-          if(conseguiuColocar === true){
-            celulasOcupadas.push(celulasOcupadasParaEste);
-            palavrasEmJogoDados.push([linha, coluna, orientacao]);
-            break;
-          }
-        }
-      });
-      return palavrasEmJogoDados;
-    }
-
-    function colocaPalavraTabelaJogo(dados){
-
-      const [linha, coluna, orientacao, palavra] = dados;
-
-      switch (orientacao) {
-        case 1:
-          // cima baixo
-          for (let index = 0; index < palavra.length; index++)
-            tabelaJogoTemp[linha+index][coluna] = palavra[index];
-          break;
-        case 2:
-          // diagonal esquerda cima -> direita baixo
-          for (let index = 0; index < palavra.length; index++)
-            tabelaJogoTemp[linha+index][coluna+index] = palavra[index];
-          break;
-
-        case 3:
-          // diagonal esquerda baixo -> direita cima
-          for (let index = 0; index < palavra.length; index++) 
-            tabelaJogoTemp[linha-index][coluna+index] = palavra[index];
-          break;
-
-          default:
-            // esquerda direita
-            for (let index = 0; index < palavra.length; index++)
-              tabelaJogoTemp[linha][coluna+index] = palavra[index];
-            break;
-      }
-
-    }
-
-    function colocaPalavrasTabelaJogo(){
-      
-      if (dificuldadeAtual === 0)
-        return;
-
-      preencheTabelaJogoComLetrasRandom();
-
-      palavrasEmJogo = geraPalavrasRandom();
-      palavrasEmJogo = palavrasEmJogo.sort((a, b) => b.length - a.length);
-
-      let comoColocarPalavrasTabela = geraComoColocarNaTabela(palavrasEmJogo);
-
-      for (let index = 0; index < palavrasEmJogo.length; index++) {
-        comoColocarPalavrasTabela[index].push(palavrasEmJogo[index]);
-        colocaPalavraTabelaJogo(comoColocarPalavrasTabela[index]);
-      }
-    }
-
-    colocaPalavrasTabelaJogo();
-
-    setTabelaJogo(tabelaJogoTemp);
+    setTabelaJogo(tabelaJogo);
     setPalavrasEmJogo(palavrasEmJogo);
     setPalavrasEncontradas([]);
+
   }
 
   const handleLevelChange = (event) => {
@@ -281,6 +85,7 @@ function App() {
 
     initJogo(value);
   }
+
   return (
     <div id="container">
       <Header />
@@ -291,6 +96,7 @@ function App() {
           selectedLevel={selectedLevel}
           onLevelChange={handleLevelChange}
           timer={timer}
+          points={points}
         />
         <GameWords 
           palavrasEmJogo={palavrasEmJogo}
@@ -301,6 +107,7 @@ function App() {
           tabelaJogo={tabelaJogo}
           palavrasEmJogo={palavrasEmJogo}
           setPalavrasEncontradas={setPalavrasEncontradas}
+          setEncontrouPalavra={setEncontrouPalavra}
         />
       </main>
       <Footer />

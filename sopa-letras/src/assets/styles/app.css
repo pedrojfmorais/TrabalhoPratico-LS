@@ -78,7 +78,9 @@ table, th, td {
 }
 
 .tabelaJogo {
-  border-collapse: collapse;
+  border-radius: 2%;
+  border-spacing: 5px;
+  user-select: none;
 }
 
 .palavrasPossiveis {
@@ -88,4 +90,20 @@ table, th, td {
 table.palavrasPossiveis {
   border-radius: 50px;
   border: 1px solid;
+}
+
+.tabelaJogo td{
+  border-radius: 25%;
+  text-align:center;
+  vertical-align:middle;
+  background-color:#ccc;
+  border:1px solid #fff;
+}
+
+td.highlighted {
+  background-color: yellow;
+}
+
+td.palavraCerta {
+  background-color: skyblue;
 }

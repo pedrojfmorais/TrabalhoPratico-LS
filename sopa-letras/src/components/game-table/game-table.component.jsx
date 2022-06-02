@@ -2,14 +2,15 @@ import React, { memo } from "react";
 
 const GameTable = memo((props) => {
 
-  let { gameStarted, tabelaJogo, palavrasEmJogo} = props;
+  let { gameStarted, tabelaJogo, palavrasEmJogo, setPalavrasEncontradas } = props;
 
-  //Se não tiver palavras em jogo não coloca as tabelas
+  //Se não tiver palavras em jogo não coloca a tabela
   if(Object.keys(palavrasEmJogo).length === 0)
     return (<div></div>);
 
   let mouseDown = false;
   let palavraSelecionada = "";
+  let palavrasEncontradas = [];
   const selectedCell = (event) => {
     
     if(gameStarted && mouseDown && !event.currentTarget.classList.contains("highlighted")){
@@ -46,12 +47,14 @@ const GameTable = memo((props) => {
       for (let index = 0; index < elements.length; index++) {
         elements[index].classList.add("palavraCerta");
       }
+      palavrasEncontradas.push(palavra);
+      setPalavrasEncontradas(palavrasEncontradas);
     }
 
     Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
 
     //TODO: 
-    // riscar ou remover palavra das palavras em jogo
+    // adicionar pontos ao acertar palavra, (tempo atual * numero de letras) é o numero de pontos a adicionar
     //  verificar direção da seleção
     //   condição de fim de jogo
   }
@@ -59,21 +62,7 @@ const GameTable = memo((props) => {
   return (
     <div>
       <div>
-      <table className="palavrasPossiveis">
-          <thead>
-          </thead>
-          <tbody>
-            <tr className="palavrasPossiveis">
-            {palavrasEmJogo.map((item, index) => {
-            return (
-              <td className="palavrasPossiveis" key={item}>
-                {item + ' '}
-              </td>
-            );
-          })}
-            </tr>   
-          </tbody>
-        </table>
+      
       </div>
       <br></br>
       <div>

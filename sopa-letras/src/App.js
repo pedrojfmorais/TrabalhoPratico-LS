@@ -5,6 +5,7 @@ import {
   Header,
   Footer,
   ControlPanel,
+  GameWords,
   GameTable,
 } from "./components";
 
@@ -14,12 +15,13 @@ function App() {
   const [selectedLevel, setSelectedLevel] = useState("0");
   const [tabelaJogo, setTabelaJogo] = useState([[]]);
   const [palavrasEmJogo, setPalavrasEmJogo] = useState([]);
+  const [palavrasEncontradas, setPalavrasEncontradas] = useState([]);
   const [timer, setTimer] = useState(20);
 
   useEffect(() => { 
     
   let timerId = undefined;
-  let tempoDificuldade = [20, 40, 60]
+  let tempoDificuldade = [120, 90, 60]
   
     if (gameStarted) { 
       timerId = setInterval(() => { 
@@ -44,19 +46,16 @@ function App() {
       setGameStarted(false);
     } else {
       setGameStarted(true);
+      initJogo(selectedLevel);
     }
   };
 
-  const handleLevelChange = (event) => {
+  function initJogo(_dificuldadeAtual){
 
-    const { value } = event.currentTarget;
-    setSelectedLevel(value);
+    let dificuldadeAtual = parseInt(_dificuldadeAtual);
 
-    
     Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
     Array.from(document.querySelectorAll('.palavraCerta')).forEach((el) => el.classList.remove('palavraCerta'));
-
-    const dificuldadeAtual = parseInt(value);
 
     const palavrasPossiveis = ['REACT', 'JAVASCRIPT', 'HTML', 'CSS', 'BACKBONE', 'ANGULAR', 'SVELTE', 'EMBER', 'BOOTSTRAP', 'VUE', 'JAVA', 'PYTHON', 'SQL']; 
     
@@ -115,7 +114,6 @@ function App() {
       return palavras;
     }
 
-    
     function geraComoColocarNaTabela(palavras){
 
       let palavrasEmJogoDados = [];
@@ -273,8 +271,16 @@ function App() {
 
     setTabelaJogo(tabelaJogoTemp);
     setPalavrasEmJogo(palavrasEmJogo);
+    setPalavrasEncontradas([]);
   }
 
+  const handleLevelChange = (event) => {
+
+    const { value } = event.currentTarget;
+    setSelectedLevel(value);
+
+    initJogo(value);
+  }
   return (
     <div id="container">
       <Header />
@@ -286,10 +292,15 @@ function App() {
           onLevelChange={handleLevelChange}
           timer={timer}
         />
+        <GameWords 
+          palavrasEmJogo={palavrasEmJogo}
+          palavrasEncontradas={palavrasEncontradas}
+        />
         <GameTable 
           gameStarted={gameStarted}
           tabelaJogo={tabelaJogo}
           palavrasEmJogo={palavrasEmJogo}
+          setPalavrasEncontradas={setPalavrasEncontradas}
         />
       </main>
       <Footer />

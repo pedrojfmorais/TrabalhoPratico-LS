@@ -107,3 +107,7 @@ td.highlighted {
 td.palavraCerta {
   background-color: skyblue;
 }
+
+td.wordFound {
+  text-decoration: line-through;
+}

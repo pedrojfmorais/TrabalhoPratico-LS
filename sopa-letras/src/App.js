@@ -275,36 +275,6 @@ function App() {
     setPalavrasEmJogo(palavrasEmJogo);
   }
 
-  const onPalavraSelecionada = (palavra) => {
-
-    let palavraCerta = false;
-    let inversa = palavra.split("").reverse().join("");
-
-    for (const element of palavrasEmJogo) {
-      
-      if(palavra === element || inversa === element){
-        palavraCerta = true;
-        break;
-      }
-    }
-    
-    let elements=document.getElementsByClassName("highlighted");
-
-    if(palavraCerta){
-      for (let index = 0; index < elements.length; index++) {
-        elements[index].classList.add("palavraCerta");
-      }
-    }
-
-    Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
-
-    //TODO: 
-    // riscar ou remover palavra das palavras em jogo
-    //  verificar direção da seleção
-    //   condição de fim de jogo
-    //    useEffect ao alterar o segundo para a seleção das células
-  }
-
   return (
     <div id="container">
       <Header />
@@ -320,7 +290,6 @@ function App() {
           gameStarted={gameStarted}
           tabelaJogo={tabelaJogo}
           palavrasEmJogo={palavrasEmJogo}
-          onPalavraSelecionada={onPalavraSelecionada}
         />
       </main>
       <Footer />

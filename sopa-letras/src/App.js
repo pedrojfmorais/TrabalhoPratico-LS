@@ -20,13 +20,51 @@ function App() {
   const [palavrasEmJogo, setPalavrasEmJogo] = useState([]);
   const [palavrasEncontradas, setPalavrasEncontradas] = useState([]);
   const [encontrouPalavra, setEncontrouPalavra] = useState(false);
+  const [ganhouJogo, setGanhouJogo] = useState(false);
   const [points, setPoints] = useState(0);
-  const [timer, setTimer] = useState(20);
+  const [timer, setTimer] = useState(-1);
+  const [textoModal, setTextoModal] = useState("");
+  const [classeTextoModal, setClasseTextoModal] = useState("");
 
   useEffect(() => { 
     
     let timerId = undefined;
     
+    function terminouJogo(){
+
+      if(timer === -1)
+        return;
+
+      if(ganhouJogo){
+        setTextoModal("Ganhou");
+        setClasseTextoModal("modalTitulo ganhou");
+      }
+      else{
+        setTextoModal("Perdeu");
+        setClasseTextoModal("modalTitulo perdeu");
+      }
+      
+      var modal = document.getElementById("myModal");
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+
+      modal.style.display = "block";
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+
+      }
+    }
+
     //atualizar pontos
     if(encontrouPalavra){
       setPoints(points + (palavrasEncontradas[palavrasEncontradas.length-1].length * timer));
@@ -34,8 +72,10 @@ function App() {
     }
 
     //deteta fim do jogo
-    if(palavrasEmJogo.length === palavrasEncontradas.length){
+    if(palavrasEmJogo.length === palavrasEncontradas.length && timer > 0){
       setGameStarted(false);
+      setGanhouJogo(true);
+      terminouJogo();
     }
     
     if (gameStarted) { 
@@ -44,6 +84,8 @@ function App() {
         let nextTimer = timer - 1; 
         if (nextTimer === 0) { 
           setGameStarted(false); 
+          setGanhouJogo(false);
+          terminouJogo();
         } 
       }, 1000); 
     } else if (timer !== TEMPO_DIFICULDADE[parseInt(selectedLevel)-1]) { 
@@ -54,13 +96,14 @@ function App() {
         clearInterval(timerId); 
       } 
     }; 
-  }, [gameStarted, timer, points, selectedLevel, palavrasEmJogo, palavrasEncontradas, encontrouPalavra ]);
+  }, [gameStarted, timer, points, selectedLevel, palavrasEmJogo, palavrasEncontradas, encontrouPalavra, ganhouJogo ]);
 
   const handleGameStart = () => {
     if (gameStarted) {
       setGameStarted(false);
     } else {
       setGameStarted(true);
+      setGanhouJogo(false);
       initJogo(selectedLevel);
     }
   };
@@ -109,6 +152,13 @@ function App() {
           setPalavrasEncontradas={setPalavrasEncontradas}
           setEncontrouPalavra={setEncontrouPalavra}
         />
+        <div id="myModal" className="modal">
+          <div className="modal-content">
+            <span className="close">&times;</span>
+            <p className={classeTextoModal}>{textoModal}</p>
+            <p className="modalTexto">Pontuação: {points}</p>
+          </div>
+        </div>
       </main>
       <Footer />
     </div>

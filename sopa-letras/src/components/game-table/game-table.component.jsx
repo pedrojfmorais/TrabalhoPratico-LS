@@ -38,7 +38,7 @@ const GameTable = memo((props) => {
       if(palavra === element || inversa === element){
         palavraCerta = true;
 
-        //caso ela esteja invertida fica direita
+        //caso a palavra esteja invertida fica direita
         palavra = element;
 
         break;
@@ -60,7 +60,6 @@ const GameTable = memo((props) => {
 
     //TODO: 
     // verificar direção da seleção
-    //  modal no fim do jogo
     //   utilizador inserir a palavras a procurar
   }
 

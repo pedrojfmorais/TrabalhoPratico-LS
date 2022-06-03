@@ -60,7 +60,7 @@ const GameTable = memo((props) => {
 
     //TODO: 
     // verificar direção da seleção
-    //  condição de fim de jogo
+    //  modal no fim do jogo
     //   utilizador inserir a palavras a procurar
   }
 

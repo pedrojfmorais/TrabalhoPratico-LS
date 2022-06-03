@@ -32,9 +32,11 @@ const GameTable = memo((props) => {
         selecionaLetra(event);
       
       } else {
-
         // verifica se está na horizontal, vertical ou diagonal (variável direcaoAtual valores (1, 2, 3) respetivamente)
-        //  depois verifica para qual lado está a andar esquerda/cima ou direita/baixo (variável direcaoSelecao valores (1, 2) respetivamente)
+        //  depois verifica para qual lado está a andar (variável direcaoSelecao)
+          // horizonatal - direita ou esquerda valores (1, 2) respetivamente
+          // vertical - baixo ou cima valores (1, 2) respetivamente
+          // diagonal - baixo e direita, baixo e esquerda, cima e direita ou cima e esquerda valores (1, 2, 3, 4) respetivamente
         if(linha === letrasSelecionadas[0][0] && (direcaoAtual === 0 || direcaoAtual === 1)){
 
           direcaoAtual = 1;
@@ -45,6 +47,9 @@ const GameTable = memo((props) => {
         
             else if(coluna+1 === letrasSelecionadas[0][1])
               direcaoSelecao = 2;
+
+              letrasSelecionadas.push([linha, coluna]);
+              selecionaLetra(event);
 
           } else {
             if(coluna-1 === letrasSelecionadas[letrasSelecionadas.length-1][1] && direcaoSelecao === 1){
@@ -67,6 +72,9 @@ const GameTable = memo((props) => {
             else if(linha+1 === letrasSelecionadas[0][0])
               direcaoSelecao = 2;
 
+            letrasSelecionadas.push([linha, coluna]);
+            selecionaLetra(event);
+
           } else {
             if(linha-1 === letrasSelecionadas[letrasSelecionadas.length-1][0] && direcaoSelecao === 1){
               letrasSelecionadas.push([linha, coluna]);
@@ -78,22 +86,40 @@ const GameTable = memo((props) => {
             }
           }
 
-        } else if((letrasSelecionadas[0][0] - linha) === (letrasSelecionadas[0][1] - coluna) && (direcaoAtual === 0 || direcaoAtual === 3)){
+        } else if(
+          (
+            (letrasSelecionadas[0][0] - linha) === (letrasSelecionadas[0][1] - coluna) || 
+            (letrasSelecionadas[0][0] - linha) * - 1 === (letrasSelecionadas[0][1] - coluna)
+          ) && (direcaoAtual === 0 || direcaoAtual === 3)){
           
           direcaoAtual = 3;
-          
           if(direcaoSelecao === 0){
             if(linha-1 === letrasSelecionadas[0][0] && coluna-1 === letrasSelecionadas[0][1])
               direcaoSelecao = 1;
-            else if(linha+1 === letrasSelecionadas[0][0] && coluna+1 === letrasSelecionadas[0][1])
+            else if(linha-1 === letrasSelecionadas[0][0] && coluna+1 === letrasSelecionadas[0][1])
               direcaoSelecao = 2;
+            else if(linha+1 === letrasSelecionadas[0][0] && coluna-1 === letrasSelecionadas[0][1])
+              direcaoSelecao = 3;
+            else if(linha+1 === letrasSelecionadas[0][0] && coluna+1 === letrasSelecionadas[0][1])
+              direcaoSelecao = 4;
+
+            letrasSelecionadas.push([linha, coluna]);
+            selecionaLetra(event);
 
           } else {
             if(linha-1 === letrasSelecionadas[letrasSelecionadas.length-1][0] && coluna-1 === letrasSelecionadas[letrasSelecionadas.length-1][1] && direcaoSelecao === 1){
               letrasSelecionadas.push([linha, coluna]);
               selecionaLetra(event);
             }
-            else if(linha+1 === letrasSelecionadas[letrasSelecionadas.length-1][0] && coluna+1 === letrasSelecionadas[letrasSelecionadas.length-1][1] && direcaoSelecao === 2){
+            else if(linha-1 === letrasSelecionadas[letrasSelecionadas.length-1][0] && coluna+1 === letrasSelecionadas[letrasSelecionadas.length-1][1] && direcaoSelecao === 2){
+              letrasSelecionadas.push([linha, coluna]);
+              selecionaLetra(event);
+            }
+            else if(linha+1 === letrasSelecionadas[letrasSelecionadas.length-1][0] && coluna-1 === letrasSelecionadas[letrasSelecionadas.length-1][1] && direcaoSelecao === 3){
+              letrasSelecionadas.push([linha, coluna]);
+              selecionaLetra(event);
+            }
+            else if(linha+1 === letrasSelecionadas[letrasSelecionadas.length-1][0] && coluna+1 === letrasSelecionadas[letrasSelecionadas.length-1][1] && direcaoSelecao === 4){
               letrasSelecionadas.push([linha, coluna]);
               selecionaLetra(event);
             }

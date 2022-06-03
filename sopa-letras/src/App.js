@@ -79,7 +79,7 @@ function App() {
         clearInterval(timerId); 
       } 
     }; 
-  }, [gameStarted, timer, points, selectedLevel, palavrasEmJogo, palavrasEncontradas, encontrouPalavra, ganhouJogo ]);
+  }, [gameStarted, timer, points, selectedLevel, palavrasEmJogo, palavrasEncontradas, encontrouPalavra, ganhouJogo]);
 
   const handleGameStart = () => {
     if (gameStarted) {
@@ -101,6 +101,7 @@ function App() {
     setTabelaJogo(tabelaJogo);
     setPalavrasEmJogo(palavrasEmJogo);
     setPalavrasEncontradas([]);
+    setPoints(0);
 
   }
 

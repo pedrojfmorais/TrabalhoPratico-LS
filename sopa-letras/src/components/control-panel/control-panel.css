@@ -183,3 +183,18 @@ button:hover {
 .inGameInfo {
   margin-top: 4px;
 }
+
+#btShowWords {
+  margin-left: 10px;
+  border: 1px solid #5e5858;
+  background-color: orange;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
+  justify-self: end;
+  align-self: right;
+}
+#btShowWords:hover {
+  background: rgba(0, 0, 0, 0.1);
+  background:darkorange;
+}

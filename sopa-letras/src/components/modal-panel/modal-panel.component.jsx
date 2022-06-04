@@ -3,7 +3,7 @@ import "./modal-panel.css";
 
 function ModalPanel(props) {
 
-    let { classeTextoModal, textoModal, points, abreModal, setAbreModal} = props;
+    let { classeTextoModal, tituloModal, textoModal, abreModal, setAbreModal} = props;
     const ref = useRef();
 
     const closeModal = () => {
@@ -23,8 +23,8 @@ function ModalPanel(props) {
                 <div className="modal" ref={ref}>
                     <div className="modal-content">
                     <span className="close" onClick={closeModal}>&times;</span>
-                    <p className={classeTextoModal}>{textoModal}</p>
-                    <p className="modalTexto">Pontuação: {points}</p>
+                    <p className={"modalTitulo " + classeTextoModal}>{tituloModal}</p>
+                    <p className="modalTexto">{textoModal}</p>
                     </div>
                 </div>
             ) : (

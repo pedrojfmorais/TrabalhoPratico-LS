@@ -1,9 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 import "./control-panel.css";
+import { PALAVRAS_POSSIVEIS } from "../../constants";
 
 function ControlPanel(props) {
-  const { gameStarted, selectedLevel, onGameStart, onLevelChange, timer, points, addWord, resetWords } = props;
+
+  const { gameStarted, selectedLevel, onGameStart, onLevelChange, timer, points, 
+    userWords, setUserWords, setTituloModal, setClasseTextoModal, setTextoModal, setAbreModal } = props;
+
   const gameStartedClass = gameStarted ? " gameStarted" : "";
+
+  const [word, setWord] = useState("");
+
+  const addWord = () => {
+
+    if(word === '')
+      return;
+
+    let currentWords = userWords;
+    
+    if(currentWords.includes(word.toUpperCase()) || PALAVRAS_POSSIVEIS.includes(word.toUpperCase())){
+      
+      setTituloModal("Erro");
+      setClasseTextoModal("vermelho");
+      setTextoModal("Esta palavra já se encontra inserida!");
+      setAbreModal(true);
+
+      return;
+    }
+
+    currentWords.push(word.toUpperCase());
+
+    setUserWords(currentWords);
+
+    setWord("");
+  }
+
+  const resetWords = () => setUserWords([]);
+
+  const onInputChange = (event) => setWord(event.target.value);
+
+  const carregouEnter = event => {
+    if(event.key === 'Enter') 
+      addWord(); 
+  }
+  
+  const submeterWord = event => event.preventDefault();  
+
+  const mostraPalavras = () => {
+    setTituloModal("Palavras Inseridas");
+    setClasseTextoModal("verde");
+
+    let texto = "";
+
+    userWords.forEach(element => {
+      texto += element + ", ";
+    });
+
+    setTextoModal(texto.substring(0, texto.length - 2));
+    setAbreModal(true);
+  }
 
   return (
     <section id="panel-control">
@@ -17,9 +72,9 @@ function ControlPanel(props) {
                 disabled={gameStarted}
               >
                 <option value="0">Seleccione...</option>
-                <option value="1">Básico (10x10 5 palavras)</option>
-                <option value="2">Intermédio (15x15 7 palavras)</option>
-                <option value="3">Avançado (20x20 9 palavras)</option>
+                <option value="1">Básico (10x10, 5 palavras)</option>
+                <option value="2">Intermédio (15x15, 7 palavras)</option>
+                <option value="3">Avançado (20x20, 9 palavras)</option>
               </select>
             </fieldset>
             <button
@@ -33,10 +88,25 @@ function ControlPanel(props) {
       </form>
 
       {!gameStarted ? 
-        <form className="form" id="addWords">
+        <form className="form" id="addWords" onSubmit={submeterWord}>
           <fieldset className="form-group">
             <label htmlFor="inputPalavra">Palavras:</label>
-            <input type="text" id="inputPalavra" name="inputPalavra" placeholder="Adicionar Palavra"></input>
+            <input 
+              type="text" 
+              id="inputPalavra" 
+              name="inputPalavra" 
+              placeholder="Adicionar Palavra" 
+              onChange={onInputChange}
+              onKeyDown={carregouEnter}
+              value={word}
+              ></input>
+              <button
+              type="button"
+              id="btShowWords"
+              onClick={mostraPalavras}
+            >
+              Mostrar
+            </button>
           </fieldset>
           <fieldset className="form-group buttonsWords">
             <button

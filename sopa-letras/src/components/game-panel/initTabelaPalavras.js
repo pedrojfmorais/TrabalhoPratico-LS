@@ -9,8 +9,9 @@ function generateRandomLetter() {
     return characters.charAt(getRandomNumber(characters.length));
 }
 
-function getRandomWord() {
-    return PALAVRAS_POSSIVEIS[getRandomNumber(PALAVRAS_POSSIVEIS.length)];
+function getRandomWord(palavrasUtilizador) {
+    palavrasUtilizador = palavrasUtilizador.concat(PALAVRAS_POSSIVEIS);
+    return palavrasUtilizador[getRandomNumber(palavrasUtilizador.length)];
 }
 
 function preencheTabelaJogoComLetrasRandom(tabelaJogoTemp, dificuldadeAtual){
@@ -24,21 +25,21 @@ function preencheTabelaJogoComLetrasRandom(tabelaJogoTemp, dificuldadeAtual){
     return tabelaJogoTemp;
 }
 
-function geraPalavrasRandom(dificuldadeAtual){
+function geraPalavrasRandom(dificuldadeAtual, palavrasUtilizador){
 
     let palavras = [];
 
     let novaPalavra = true;
 
     for (let i = 0; i < NUMERO_PALAVRAS_DIFICULDADE[dificuldadeAtual-1]; i++) {
-        let palavra = getRandomWord();
+        let palavra = getRandomWord(palavrasUtilizador);
 
         while(true){
             novaPalavra = true;
             for (let index = 0; index < palavras.length; index++)
                 if(palavras[index] === palavra || palavra.length > NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1]){
                 novaPalavra = false;
-                palavra = getRandomWord();
+                palavra = getRandomWord(palavrasUtilizador);
                 break;
                 }
                 
@@ -132,16 +133,16 @@ function geraComoColocarNaTabela(palavras, dificuldadeAtual){
             
             for (let index_palavra = 0; index_palavra < celulasOcupadas.length; index_palavra++) {
                 for (let index = 0; index < celulasOcupadas[index_palavra].length; index++) {
-                for (let index_celulas_este = 0; index_celulas_este < celulasOcupadasParaEste.length; index_celulas_este++) {
-                    
-                    if(celulasOcupadas[index_palavra][index][0] === celulasOcupadasParaEste[index_celulas_este][0] &&
-                        celulasOcupadas[index_palavra][index][1] === celulasOcupadasParaEste[index_celulas_este][1]){
-                    conseguiuColocar = false;
-                    break;
+                    for (let index_celulas_este = 0; index_celulas_este < celulasOcupadasParaEste.length; index_celulas_este++) {
+                        
+                        if(celulasOcupadas[index_palavra][index][0] === celulasOcupadasParaEste[index_celulas_este][0] &&
+                            celulasOcupadas[index_palavra][index][1] === celulasOcupadasParaEste[index_celulas_este][1]){
+                        conseguiuColocar = false;
+                        break;
+                        }
                     }
-                }
-                if(conseguiuColocar === false)
-                    break;
+                    if(conseguiuColocar === false)
+                        break;
                 }
                 if(conseguiuColocar === false)
                 break;
@@ -187,14 +188,14 @@ function colocaPalavraTabelaJogo(dados, tabelaJogoTemp){
     return tabelaJogoTemp;
 }
 
-function colocaPalavrasTabelaJogo(dificuldadeAtual, tabelaJogoTemp, palavrasEmJogo){
+function colocaPalavrasTabelaJogo(dificuldadeAtual, tabelaJogoTemp, palavrasEmJogo, palavrasUtilizador){
 
     if (dificuldadeAtual === 0)
         return;
 
     tabelaJogoTemp = preencheTabelaJogoComLetrasRandom(tabelaJogoTemp, dificuldadeAtual);
 
-    palavrasEmJogo = geraPalavrasRandom(dificuldadeAtual);
+    palavrasEmJogo = geraPalavrasRandom(dificuldadeAtual, palavrasUtilizador);
     palavrasEmJogo = palavrasEmJogo.sort((a, b) => b.length - a.length);
 
     let comoColocarPalavrasTabela = [];
@@ -210,7 +211,7 @@ function colocaPalavrasTabelaJogo(dificuldadeAtual, tabelaJogoTemp, palavrasEmJo
     return [tabelaJogoTemp, palavrasEmJogo];
 }
 
-function initTabelaPalavras(dificuldadeAtual){
+function initTabelaPalavras(dificuldadeAtual, palavrasUtilizador){
 
     Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
     Array.from(document.querySelectorAll('.palavraCerta')).forEach((el) => el.classList.remove('palavraCerta'));
@@ -218,7 +219,7 @@ function initTabelaPalavras(dificuldadeAtual){
     let tabelaJogoTemp = [[]];
     let palavrasEmJogo = [];  
 
-    [tabelaJogoTemp, palavrasEmJogo] = colocaPalavrasTabelaJogo(dificuldadeAtual, tabelaJogoTemp, palavrasEmJogo);
+    [tabelaJogoTemp, palavrasEmJogo] = colocaPalavrasTabelaJogo(dificuldadeAtual, tabelaJogoTemp, palavrasEmJogo, palavrasUtilizador);
     
     return [tabelaJogoTemp, palavrasEmJogo];
 }

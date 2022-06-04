@@ -24,9 +24,11 @@ function App() {
   const [ganhouJogo, setGanhouJogo] = useState(false);
   const [points, setPoints] = useState(0);
   const [timer, setTimer] = useState(-1);
+  const [tituloModal, setTituloModal] = useState("");
   const [textoModal, setTextoModal] = useState("");
   const [classeTextoModal, setClasseTextoModal] = useState("");
   const [abreModal, setAbreModal] = useState(false);
+  const [userWords, setUserWords] = useState([]);
 
   useEffect(() => { 
     
@@ -38,13 +40,14 @@ function App() {
         return;
 
       if(ganhouJogo){
-        setTextoModal("Ganhou");
-        setClasseTextoModal("modalTitulo ganhou");
+        setTituloModal("Ganhou");
+        setClasseTextoModal("verde");
       }
       else{
-        setTextoModal("Perdeu");
-        setClasseTextoModal("modalTitulo perdeu");
+        setTituloModal("Perdeu");
+        setClasseTextoModal("vermelho");
       }
+      setTextoModal("Pontuação: " + points);
       setAbreModal(true);
     }
 
@@ -96,7 +99,7 @@ function App() {
     let tabelaJogo = [[]];
     let palavrasEmJogo = [];
 
-    [tabelaJogo, palavrasEmJogo] = initTabelaPalavras(parseInt(dificuldadeAtual));
+    [tabelaJogo, palavrasEmJogo] = initTabelaPalavras(parseInt(dificuldadeAtual), userWords);
     
     setTabelaJogo(tabelaJogo);
     setPalavrasEmJogo(palavrasEmJogo);
@@ -125,6 +128,12 @@ function App() {
           onLevelChange={handleLevelChange}
           timer={timer}
           points={points}
+          userWords={userWords}
+          setUserWords={setUserWords}
+          setTituloModal={setTituloModal}
+          setClasseTextoModal={setClasseTextoModal}
+          setTextoModal={setTextoModal}
+          setAbreModal={setAbreModal}
         />
         <GameWords 
           palavrasEmJogo={palavrasEmJogo}
@@ -141,8 +150,8 @@ function App() {
         />
         <ModalPanel 
           classeTextoModal={classeTextoModal}
-          textoModal={textoModal}  
-          points={points}
+          tituloModal={tituloModal}  
+          textoModal={textoModal}
           abreModal={abreModal}
           setAbreModal={setAbreModal}
         />

@@ -1,31 +1,37 @@
+import "./game-panel.css"
+
 function GameWords(props) {
 
-    let { palavrasEmJogo, palavrasEncontradas} = props;
-    //Se não tiver palavras em jogo não coloca a tabela
-    if(Object.keys(palavrasEmJogo).length === 0)
-        return (<div></div>);
+    let { palavrasEmJogo, palavrasEncontradas, selectedLevel} = props;
 
     return(
-        <table className="palavrasPossiveis">
-          <thead>
-          </thead>
-          <tbody>
-            <tr className="palavrasPossiveis">
-            {palavrasEmJogo.map((item, index) => {
-              let classes = "palavrasPossiveis ";
-              palavrasEncontradas.forEach(element => {
-                if(element === item)
-                  classes += "wordFound";
-              });
-            return (
-              <td className={classes} key={item}>
-                {item + ' '}
-              </td>
-            );
-          })}
-            </tr>   
-          </tbody>
-        </table>
+      <div>
+        {/* só mostra a tabela se estiver algum nivel selecionado */}
+        {selectedLevel !== '0' ?
+          <table className="palavrasPossiveis">
+            <thead>
+            </thead>
+            <tbody>
+              <tr className="palavrasPossiveis">
+              {palavrasEmJogo.map((item, index) => {
+                let classes = "palavrasPossiveis ";
+                palavrasEncontradas.forEach(element => {
+                  if(element === item)
+                    classes += "wordFound";
+                });
+              return (
+                <td className={classes} key={item}>
+                  {item + ' '}
+                </td>
+              );
+            })}
+              </tr>   
+            </tbody>
+          </table>
+        : 
+          <div></div>
+        }
+      </div>
     );
 }
 

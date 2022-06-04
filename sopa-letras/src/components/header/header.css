@@ -1,0 +1,23 @@
+.title,
+.subtitle {
+    font-family: inherit;
+    text-align: center;
+    letter-spacing: 2px;
+    line-height: 1.5em;
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+    font-weight:900;
+}
+
+.title {
+    color: darkgoldenrod;
+    text-transform: uppercase;
+    font-size: xx-large;
+}
+
+.subtitle {
+    color: goldenrod;
+    font-style: italic;
+    font-size: x-large; 
+}

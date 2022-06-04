@@ -1,10 +1,13 @@
 import React from "react";
+import "./footer.css";
+
 function Footer() {
   return (
     <footer>
-      <p> 2018020733 - Pedro Morais </p>
-      <p> 2020128146 - Ricardo Santos </p>
-      <p> 2018017110 - Telmo Marques</p>
+      <h1 className="titleFooter"> Autores: </h1>
+      <p className="authors"> 2018020733 - Pedro Morais </p>
+      <p className="authors"> 2020128146 - Ricardo Santos </p>
+      <p className="authors"> 2018017110 - Telmo Marques</p>
     </footer>
   );
 }

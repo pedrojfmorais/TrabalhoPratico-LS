@@ -1,12 +1,9 @@
 import React, { memo } from "react";
+import "./game-panel.css"
 
 const GameTable = memo((props) => {
 
-  let { gameStarted, tabelaJogo, palavrasEmJogo, setPalavrasEncontradas, setEncontrouPalavra } = props;
-
-  //Se não tiver palavras em jogo não coloca a tabela
-  if(Object.keys(palavrasEmJogo).length === 0)
-    return (<div></div>);
+  let { gameStarted, tabelaJogo, palavrasEmJogo, setPalavrasEncontradas, setEncontrouPalavra, selectedLevel } = props;
 
   let mouseDown = false;
   let palavraSelecionada = "";
@@ -171,34 +168,34 @@ const GameTable = memo((props) => {
 
     Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
 
-    //TODO: 
-    // utilizador inserir a palavras a procurar
   }
 
   return (
     <div>
-      <div>
-      
-      </div>
-      <br></br>
-      <div>
-        <table className="tabelaJogo" onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
-          <thead>
-          </thead>
-          <tbody>
-            {tabelaJogo.map((items, index_linha) => {
-              return (
-                <tr key={index_linha}>
-                  {items.map((item, index) => {
-                    return (<td id={index_linha + ' ' + index} key={index_linha + ' ' + index} onMouseMove={selectedCell}>{item}</td>);
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      <br></br>
+      {/* só mostra a tabela se estiver algum nivel selecionado */}
+      {selectedLevel !== '0' ?
+        <div>
+          <br></br>
+          <table className="tabelaJogo" onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
+            <thead>
+            </thead>
+            <tbody>
+              {tabelaJogo.map((items, index_linha) => {
+                return (
+                  <tr key={index_linha}>
+                    {items.map((item, index) => {
+                      return (<td id={index_linha + ' ' + index} key={index_linha + ' ' + index} onMouseMove={selectedCell}>{item}</td>);
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <br></br>
+        </div>
+      : 
+        <div></div>
+      }
     </div>
   );
 });

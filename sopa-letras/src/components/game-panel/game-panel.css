@@ -1,0 +1,42 @@
+table, th, td {
+  border: 1px solid;
+  padding: 5px;
+  
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tabelaJogo {
+  border-radius: 2%;
+  border-spacing: 5px;
+  user-select: none;
+}
+
+.palavrasPossiveis {
+  border: none;
+}
+
+table.palavrasPossiveis {
+  border-radius: 50px;
+  border: 1px solid;
+}
+
+.tabelaJogo td{
+  border-radius: 25%;
+  text-align:center;
+  vertical-align:middle;
+  background-color:#ccc;
+  border:1px solid #fff;
+}
+
+td.highlighted {
+  background-color: yellow;
+}
+
+td.palavraCerta {
+  background-color: skyblue;
+}
+
+td.wordFound {
+  text-decoration: line-through;
+}

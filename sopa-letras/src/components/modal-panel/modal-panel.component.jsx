@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import "./modal-panel.css";
 
 function ModalPanel(props) {
 

@@ -110,7 +110,8 @@ function App() {
     const { value } = event.currentTarget;
     setSelectedLevel(value);
 
-    initJogo(value);
+    if(value !== '0')
+      initJogo(value);
   }
 
   return (
@@ -128,6 +129,7 @@ function App() {
         <GameWords 
           palavrasEmJogo={palavrasEmJogo}
           palavrasEncontradas={palavrasEncontradas}
+          selectedLevel={selectedLevel}
         />
         <GameTable 
           gameStarted={gameStarted}
@@ -135,6 +137,7 @@ function App() {
           palavrasEmJogo={palavrasEmJogo}
           setPalavrasEncontradas={setPalavrasEncontradas}
           setEncontrouPalavra={setEncontrouPalavra}
+          selectedLevel={selectedLevel}
         />
         <ModalPanel 
           classeTextoModal={classeTextoModal}

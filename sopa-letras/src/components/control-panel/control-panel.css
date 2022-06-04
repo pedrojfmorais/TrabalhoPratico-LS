@@ -11,7 +11,7 @@
   color: grey;
   width: 90%;
   margin: 15px 0px;
-  border: 3px solid var(--globalColor);
+  border: 3px solid goldenrod;
 }
 
 #panel-control .form {
@@ -23,12 +23,12 @@
 }
 
 #panel-control .form,
-#panel-control .form-metadata {
+#panel-control .inGameInfo {
   width: 100%;
   padding: 10px 20px;
 }
 
-#panel-control .form-metadata {
+#panel-control .inGameInfo {
   display: grid;
   grid-template-columns: auto auto;
   grid-gap: 5px;
@@ -42,10 +42,6 @@
   gap: 2px;
 }
 #panel-control .list-item:not(.gameStarted) {
-  display: none;
-}
-
-#message.hide {
   display: none;
 }
 
@@ -69,11 +65,6 @@
   grid-template-columns: auto auto;
   width: 100%;
   list-style-type: none;
-}
-
-#panel-control #message {
-  color: var(--messageColor);
-  font-weight: bolder;
 }
 
 #game {
@@ -110,8 +101,7 @@
 }
 #btPlay:hover {
   background: rgba(0, 0, 0, 0.1);
-  border: 1px solid #751d1d;
-  background: var(--globalColor);
+  background: darkgreen;
 }
 
 #btPlay:disabled,
@@ -136,7 +126,7 @@
   width: 25px;
   text-align: right;
   background-color: transparent;
-  color: var(--globalColor);
+  color: steelblue;
 }
 
 button:hover {
@@ -150,4 +140,46 @@ button:hover {
 
 .hide {
   display: none;
+}
+#btAddWord {
+  border: 1px solid #5e5858;
+  background-color: cornflowerblue;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
+  justify-self: end;
+  align-self: right;
+}
+#btAddWord:hover {
+  background: rgba(0, 0, 0, 0.1);
+  background: steelblue;
+}
+#btResetWords {
+  border: 1px solid #5e5858;
+  background-color:firebrick;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
+  justify-self: end;
+  align-self: right;
+}
+#btResetWords:hover {
+  background: rgba(0, 0, 0, 0.1);
+  background: darkred;
+}
+
+.buttonsWords > * {
+  margin-left: 10px;
+}
+
+#inputPalavra {
+  padding: 6px 10px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.inGameInfo {
+  margin-top: 4px;
 }

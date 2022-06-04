@@ -1,167 +1,25 @@
 /**********************************************
 *** © Linguagens Script > DEIS > ISEC > IPC 
-*** Jogo de Memória em React
+*** Sopa de letras em React
 *** Estilos App.js 
 **********************************************/
 #container {
-    display: flex;
-    flex-direction: column;
-    margin: 20px 0 10px 0;
-    padding: 15px 20px 10px 20px;
-    background-color: #fff;
-    color: grey;
-    box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.3);
-    align-items: center;
-    width: 750px;
-    min-width: 450px;
-    border-radius: 10px;
-  }
-  .main-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-  }
-  #container > header {
-    font-size: 1.2em;
-    text-align: center;
-    letter-spacing: 2px;
-    line-height: 1.5em;
-    color: var(--globalColor);
-  }
-  footer {
-    font-size: xx-small;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-  }
-  .title,
-  .subtitle {
-    font-family: inherit;
-    font-size: 1.2rem;
-    text-align: center;
-    letter-spacing: 2px;
-    line-height: 1.5em;
-    color: var(--globalColor);
-    margin: 0;
-    padding: 0;
-    box-sizing: inherit;
-  }
-  
-  .title {
-    font-weight: bolder;
-    text-transform: uppercase;
-  }
-  
-  .subtitle {
-    font-style: italic;
-  }
-  
-  .sr-only {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: auto;
-    margin: 0;
-    overflow: hidden;
-    padding: 0;
-    position: absolute !important;
-    width: 1px;
-    white-space: nowrap;
-  }
-
-table, th, td {
-  border: 1px solid;
-  padding: 5px;
-  
-  margin-left: auto;
-  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0 10px 0;
+  padding: 15px 20px 10px 20px;
+  background-color: #fff;
+  color: grey;
+  box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.3);
+  align-items: center;
+  width: 750px;
+  min-width: 450px;
+  border-radius: 10px;
 }
-
-.tabelaJogo {
-  border-radius: 2%;
-  border-spacing: 5px;
-  user-select: none;
-}
-
-.palavrasPossiveis {
-  border: none;
-}
-
-table.palavrasPossiveis {
-  border-radius: 50px;
-  border: 1px solid;
-}
-
-.tabelaJogo td{
-  border-radius: 25%;
-  text-align:center;
-  vertical-align:middle;
-  background-color:#ccc;
-  border:1px solid #fff;
-}
-
-td.highlighted {
-  background-color: yellow;
-}
-
-td.palavraCerta {
-  background-color: skyblue;
-}
-
-td.wordFound {
-  text-decoration: line-through;
-}
-
-/* The Modal (background) */
-.modal {
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-/* Modal Content */
-.modal-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 30%;
-  text-align: center;
-}
-
-/* The Close Button */
-.close {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-p.modalTitulo{
-  font-size: 36px;
-  font-weight: 900;
-  padding: 15px;
-}
-p.ganhou{
-  color: green;
-}
-p.perdeu{
-  color: red;
-}
-p.modalTexto{
-  font-size: 16px;
-  padding: 15px;
+.main-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
 }

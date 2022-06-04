@@ -47,16 +47,26 @@ function ControlPanel(props) {
   const submeterWord = event => event.preventDefault();  
 
   const mostraPalavras = () => {
-    setTituloModal("Palavras Inseridas");
-    setClasseTextoModal("verde");
 
-    let texto = "";
+    if(userWords.length === 0){
+      setTituloModal("Ainda não foram inseridas palavras");
+      setClasseTextoModal("vermelho");
+      setTextoModal("");
 
-    userWords.forEach(element => {
-      texto += element + ", ";
-    });
+    }else{
 
-    setTextoModal(texto.substring(0, texto.length - 2));
+        setTituloModal("Palavras Inseridas");
+        setClasseTextoModal("verde");
+
+        let texto = "";
+
+        userWords.forEach(element => {
+          texto += element + ", ";
+        });
+
+        setTextoModal(texto.substring(0, texto.length - 2));
+    }
+
     setAbreModal(true);
   }
 

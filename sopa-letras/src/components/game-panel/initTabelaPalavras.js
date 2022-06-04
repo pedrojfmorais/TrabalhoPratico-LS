@@ -14,14 +14,25 @@ function getRandomWord(palavrasUtilizador) {
     return palavrasUtilizador[getRandomNumber(palavrasUtilizador.length)];
 }
 
-function preencheTabelaJogoComLetrasRandom(tabelaJogoTemp, dificuldadeAtual){
+function preencheTabelaJogoEspacos(tabelaJogoTemp, dificuldadeAtual){
+    
     tabelaJogoTemp = [[]];
-    tabelaJogoTemp = Array(NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1]).fill(0).map( 
-        () => new Array(NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1]).fill(0).map( 
-            () => generateRandomLetter()
-        )
-    );
 
+    tabelaJogoTemp = Array(NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1]).fill(0).map( 
+        () => new Array(NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1]).fill(' '));
+
+    return tabelaJogoTemp;
+}
+
+
+function preencheTabelaJogoComLetrasRandom(tabelaJogoTemp, dificuldadeAtual){
+    
+    for (let linha = 0; linha < NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1]; linha++) {
+        for (let coluna = 0; coluna < NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1]; coluna++) {
+            if(tabelaJogoTemp[linha][coluna] === " ")
+                tabelaJogoTemp[linha][coluna] = generateRandomLetter();
+        }
+    }
     return tabelaJogoTemp;
 }
 
@@ -52,10 +63,39 @@ function geraPalavrasRandom(dificuldadeAtual, palavrasUtilizador){
     return palavras;
 }
 
-function geraComoColocarNaTabela(palavras, dificuldadeAtual){
+function colocaPalavraTabelaJogo(dados, tabelaJogoTemp){
 
-    let palavrasEmJogoDados = [];
-    let celulasOcupadas = [];
+    const [linha, coluna, orientacao, palavra] = dados;
+
+    switch (orientacao) {
+        case 1:
+        // cima baixo
+        for (let index = 0; index < palavra.length; index++)
+            tabelaJogoTemp[linha+index][coluna] = palavra[index];
+        break;
+        case 2:
+        // diagonal esquerda cima -> direita baixo
+        for (let index = 0; index < palavra.length; index++)
+            tabelaJogoTemp[linha+index][coluna+index] = palavra[index];
+        break;
+
+        case 3:
+        // diagonal esquerda baixo -> direita cima
+        for (let index = 0; index < palavra.length; index++) 
+            tabelaJogoTemp[linha-index][coluna+index] = palavra[index];
+        break;
+
+        default:
+            // esquerda direita
+            for (let index = 0; index < palavra.length; index++)
+                tabelaJogoTemp[linha][coluna+index] = palavra[index];
+            break;
+    }
+    return tabelaJogoTemp;
+}
+
+function geraComoColocarNaTabela(tabelaJogoTemp, palavras, dificuldadeAtual){
+
     let palavrasComNovaOrdem = [];
 
     palavras.forEach(palavra => {
@@ -130,61 +170,18 @@ function geraComoColocarNaTabela(palavras, dificuldadeAtual){
                     celulasOcupadasParaEste.push([linha, coluna+index]);
                 break;
             }
-            
-            for (let index_palavra = 0; index_palavra < celulasOcupadas.length; index_palavra++) {
-                for (let index = 0; index < celulasOcupadas[index_palavra].length; index++) {
-                    for (let index_celulas_este = 0; index_celulas_este < celulasOcupadasParaEste.length; index_celulas_este++) {
-                        
-                        if(celulasOcupadas[index_palavra][index][0] === celulasOcupadasParaEste[index_celulas_este][0] &&
-                            celulasOcupadas[index_palavra][index][1] === celulasOcupadasParaEste[index_celulas_este][1]){
-                        conseguiuColocar = false;
-                        break;
-                        }
-                    }
-                    if(conseguiuColocar === false)
-                        break;
+            for (let letra = 0; letra < celulasOcupadasParaEste.length; letra++) {
+                if(tabelaJogoTemp[celulasOcupadasParaEste[letra][0]][celulasOcupadasParaEste[letra][1]] !== ' '){
+                    conseguiuColocar = false;
+                    break;
                 }
-                if(conseguiuColocar === false)
-                break;
             }
             if(conseguiuColocar === true){
-                celulasOcupadas.push(celulasOcupadasParaEste);
-                palavrasEmJogoDados.push([linha, coluna, orientacao]);
+                tabelaJogoTemp = colocaPalavraTabelaJogo([linha, coluna, orientacao, palavra], tabelaJogoTemp);
                 break;
             }
         }
     });
-    return [palavrasComNovaOrdem, palavrasEmJogoDados];
-}
-
-function colocaPalavraTabelaJogo(dados, tabelaJogoTemp){
-
-    const [linha, coluna, orientacao, palavra] = dados;
-
-    switch (orientacao) {
-        case 1:
-        // cima baixo
-        for (let index = 0; index < palavra.length; index++)
-            tabelaJogoTemp[linha+index][coluna] = palavra[index];
-        break;
-        case 2:
-        // diagonal esquerda cima -> direita baixo
-        for (let index = 0; index < palavra.length; index++)
-            tabelaJogoTemp[linha+index][coluna+index] = palavra[index];
-        break;
-
-        case 3:
-        // diagonal esquerda baixo -> direita cima
-        for (let index = 0; index < palavra.length; index++) 
-            tabelaJogoTemp[linha-index][coluna+index] = palavra[index];
-        break;
-
-        default:
-            // esquerda direita
-            for (let index = 0; index < palavra.length; index++)
-                tabelaJogoTemp[linha][coluna+index] = palavra[index];
-            break;
-    }
     return tabelaJogoTemp;
 }
 
@@ -193,20 +190,14 @@ function colocaPalavrasTabelaJogo(dificuldadeAtual, tabelaJogoTemp, palavrasEmJo
     if (dificuldadeAtual === 0)
         return;
 
-    tabelaJogoTemp = preencheTabelaJogoComLetrasRandom(tabelaJogoTemp, dificuldadeAtual);
+    tabelaJogoTemp = preencheTabelaJogoEspacos(tabelaJogoTemp, dificuldadeAtual);
 
     palavrasEmJogo = geraPalavrasRandom(dificuldadeAtual, palavrasUtilizador);
     palavrasEmJogo = palavrasEmJogo.sort((a, b) => b.length - a.length);
 
-    let comoColocarPalavrasTabela = [];
-    let palavrasComNovaOrdem = []; // devido a existirem palavras que vão ser colocadas de trás para a frente
+    tabelaJogoTemp = geraComoColocarNaTabela(tabelaJogoTemp, palavrasEmJogo, dificuldadeAtual);
 
-    [palavrasComNovaOrdem, comoColocarPalavrasTabela] = geraComoColocarNaTabela(palavrasEmJogo, dificuldadeAtual);
-
-    for (let index = 0; index < palavrasEmJogo.length; index++) {
-        comoColocarPalavrasTabela[index].push(palavrasComNovaOrdem[index]);
-        tabelaJogoTemp = colocaPalavraTabelaJogo(comoColocarPalavrasTabela[index], tabelaJogoTemp);
-    }
+    tabelaJogoTemp = preencheTabelaJogoComLetrasRandom(tabelaJogoTemp, dificuldadeAtual);
 
     return [tabelaJogoTemp, palavrasEmJogo];
 }

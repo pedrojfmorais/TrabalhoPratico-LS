@@ -21,8 +21,9 @@ const GameTable = memo((props) => {
     
     if(gameStarted && mouseDown && !event.currentTarget.classList.contains("highlighted")){
 
-      let linha = parseInt(event.currentTarget.id[0]);
-      let coluna = parseInt(event.currentTarget.id[2]);
+      let posicoes = event.currentTarget.id.split(' ');
+      let linha = parseInt(posicoes[0]);
+      let coluna = parseInt(posicoes[1]);
 
       if(letrasSelecionadas.length === 0){
         letrasSelecionadas.push([linha, coluna]);
@@ -37,7 +38,6 @@ const GameTable = memo((props) => {
         if(linha === letrasSelecionadas[0][0] && (direcaoAtual === 0 || direcaoAtual === 1)){
 
           direcaoAtual = 1;
-
           if(direcaoSelecao === 0){
             if(coluna-1 === letrasSelecionadas[0][1])
               direcaoSelecao = 1;

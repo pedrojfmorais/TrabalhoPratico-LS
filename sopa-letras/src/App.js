@@ -86,7 +86,13 @@ function App() {
 
   const handleGameStart = () => {
     if (gameStarted) {
-      setGameStarted(false);
+      setGameStarted(false); 
+
+      setTituloModal("Perdeu");
+      setClasseTextoModal("vermelho");
+      setTextoModal("Pontuação: " + points);
+      setAbreModal(true);
+      
     } else {
       setGameStarted(true);
       setGanhouJogo(false);

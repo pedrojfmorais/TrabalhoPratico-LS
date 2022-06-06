@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./control-panel.css";
-import { PALAVRAS_POSSIVEIS } from "../../constants";
+import { PALAVRAS_POSSIVEIS, TEMPO_DIFICULDADE } from "../../constants";
 
 function ControlPanel(props) {
 
@@ -10,6 +10,15 @@ function ControlPanel(props) {
   const gameStartedClass = gameStarted ? " gameStarted" : "";
 
   const [word, setWord] = useState("");
+  const [btnReset, setBtnReset] = useState("Reset");
+
+  // cor do timer conforme o tempo que falta
+  if(timer <= TEMPO_DIFICULDADE[parseInt(selectedLevel)-1] / 4)
+    document.documentElement.style.setProperty('--timer-color', 'red');
+  else if(timer <= TEMPO_DIFICULDADE[parseInt(selectedLevel)-1] / 2)
+    document.documentElement.style.setProperty('--timer-color', 'gold');
+  else
+    document.documentElement.style.setProperty('--timer-color', 'grey');
 
   const addWord = () => {
 
@@ -35,9 +44,30 @@ function ControlPanel(props) {
     setWord("");
   }
 
-  const resetWords = () => setUserWords([]);
+  const resetWords = () => {
+    
+    if (btnReset === "Reset")
+      setUserWords([]);
+    else{
+      let array = userWords;
+      const index = array.indexOf(word);
+      if (index > -1) {
+        array.splice(index, 1);
+      }
+      setUserWords(array);
+      setBtnReset("Reset");
+    }
+  };
 
-  const onInputChange = (event) => setWord(event.target.value);
+  const onInputChange = (event) => {
+
+    setWord(event.target.value.toUpperCase());
+
+    if(userWords.includes(event.target.value.toUpperCase()))
+      setBtnReset("Remover");
+    else
+      setBtnReset("Reset");
+  };
 
   const carregouEnter = event => {
     if(event.key === 'Enter') 
@@ -105,7 +135,7 @@ function ControlPanel(props) {
               type="text" 
               id="inputPalavra" 
               name="inputPalavra" 
-              placeholder="Adicionar Palavra" 
+              placeholder="Adicionar/Remover Palavra" 
               onChange={onInputChange}
               onKeyDown={carregouEnter}
               value={word}
@@ -131,7 +161,7 @@ function ControlPanel(props) {
               id="btResetWords"
               onClick={resetWords}
             >
-              Reset
+              {btnReset}
             </button>
           </fieldset>
         </form>

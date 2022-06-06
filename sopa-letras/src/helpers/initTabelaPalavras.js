@@ -1,4 +1,4 @@
-import { NUMERO_LINHAS_DIFICULDADE, NUMERO_PALAVRAS_DIFICULDADE, PALAVRAS_POSSIVEIS } from "../../constants";
+import { NUMERO_LINHAS_DIFICULDADE, NUMERO_PALAVRAS_DIFICULDADE, PALAVRAS_POSSIVEIS } from "../constants";
 
 function getRandomNumber(max){
     return Math.floor(Math.random() * max);

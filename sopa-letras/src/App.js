@@ -1,6 +1,6 @@
 import "./assets/styles/app.css"
 import { useState, useEffect } from "react";
-import initTabelaPalavras from "./components/game-panel/initTabelaPalavras";
+import { initTabelaPalavras } from "./helpers";
 
 import {
   Header,
@@ -8,10 +8,10 @@ import {
   ControlPanel,
   GameWords,
   GameTable,
+  ModalPanel,
 } from "./components";
 
 import { TEMPO_DIFICULDADE } from "./constants";
-import ModalPanel from "./components/modal-panel/modal-panel.component";
 
 function App() {
 
@@ -72,7 +72,8 @@ function App() {
           setGameStarted(false); 
           setGanhouJogo(false);
           terminouJogo();
-        } 
+        }
+
       }, 1000); 
     } else if (timer !== TEMPO_DIFICULDADE[parseInt(selectedLevel)-1]) { 
       setTimer(TEMPO_DIFICULDADE[parseInt(selectedLevel)-1]); 

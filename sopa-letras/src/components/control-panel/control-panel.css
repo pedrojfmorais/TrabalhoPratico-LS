@@ -196,3 +196,18 @@ button:hover {
 #gameTime {
   background-color: var(--timer-color);
 }
+
+#btTop {
+  margin-left: 10px;
+  border: 1px solid #5e5858;
+  background-color:mediumpurple;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
+  justify-self: end;
+  align-self: right;
+}
+#btTop:hover {
+  background: rgba(0, 0, 0, 0.1);
+  background:purple;
+}

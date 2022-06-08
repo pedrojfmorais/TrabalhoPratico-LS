@@ -1,14 +1,13 @@
-import React, { memo } from "react";
+import React from "react";
 import "./game-panel.css"
 
-const GameTable = memo((props) => {
+function GameTable(props) {
 
-  let { gameStarted, tabelaJogo, palavrasEmJogo, setPalavrasEncontradas, setEncontrouPalavra, selectedLevel } = props;
+  let { gameStarted, tabelaJogo, palavrasEmJogo, palavrasEncontradas, setPalavrasEncontradas, setEncontrouPalavra, selectedLevel } = props;
 
   let mouseDown = false;
   let palavraSelecionada = "";
   let letrasSelecionadas = [];
-  let palavrasEncontradas = [];
   let direcaoAtual = 0;
   let direcaoSelecao = 0;
 
@@ -161,8 +160,7 @@ const GameTable = memo((props) => {
       for (let index = 0; index < elements.length; index++) {
         elements[index].classList.add("palavraCerta");
       }
-      palavrasEncontradas.push(palavra);
-      setPalavrasEncontradas(palavrasEncontradas);
+      setPalavrasEncontradas([...palavrasEncontradas, palavra]);
       setEncontrouPalavra(true);
     }
 
@@ -198,5 +196,5 @@ const GameTable = memo((props) => {
       }
     </div>
   );
-});
+}
 export default GameTable;

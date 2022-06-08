@@ -1,6 +1,5 @@
 import "./assets/styles/app.css"
-import { useState, useEffect } from "react";
-import { initTabelaPalavras } from "./helpers";
+import { useState } from "react";
 
 import {
   Header,
@@ -11,8 +10,6 @@ import {
   ModalPanel,
 } from "./components";
 
-import { TEMPO_DIFICULDADE } from "./constants";
-
 function App() {
 
   const [gameStarted, setGameStarted] = useState(false);
@@ -21,108 +18,14 @@ function App() {
   const [palavrasEmJogo, setPalavrasEmJogo] = useState([]);
   const [palavrasEncontradas, setPalavrasEncontradas] = useState([]);
   const [encontrouPalavra, setEncontrouPalavra] = useState(false);
-  const [ganhouJogo, setGanhouJogo] = useState(false);
-  const [points, setPoints] = useState(0);
-  const [timer, setTimer] = useState(-1);
   const [tituloModal, setTituloModal] = useState("");
   const [textoModal, setTextoModal] = useState("");
   const [classeTextoModal, setClasseTextoModal] = useState("");
   const [abreModal, setAbreModal] = useState(false);
-  const [userWords, setUserWords] = useState([]);
-
-  useEffect(() => { 
-    
-    let timerId = undefined;
-    
-    function terminouJogo(){
-
-      if(timer === -1)
-        return;
-
-      if(ganhouJogo){
-        setTituloModal("Ganhou");
-        setClasseTextoModal("verde");
-      }
-      else{
-        setTituloModal("Perdeu");
-        setClasseTextoModal("vermelho");
-      }
-      setTextoModal("Pontuação: " + points);
-      setAbreModal(true);
-    }
-
-    //atualizar pontos
-    if(encontrouPalavra){
-      setPoints(points + (palavrasEncontradas[palavrasEncontradas.length-1].length * timer));
-      setEncontrouPalavra(false);
-    }
-
-    //deteta fim do jogo
-    if(palavrasEmJogo.length === palavrasEncontradas.length && timer > 0){
-      setGameStarted(false);
-      setGanhouJogo(true);
-      terminouJogo();
-    }
-    
-    if (gameStarted) { 
-      timerId = setInterval(() => { 
-        setTimer(timer-1); 
-        let nextTimer = timer - 1; 
-        if (nextTimer === 0) { 
-          setGameStarted(false); 
-          setGanhouJogo(false);
-          terminouJogo();
-        }
-
-      }, 1000); 
-    } else if (timer !== TEMPO_DIFICULDADE[parseInt(selectedLevel)-1]) { 
-      setTimer(TEMPO_DIFICULDADE[parseInt(selectedLevel)-1]); 
-    } 
-    return () => { 
-      if (timerId) { 
-        clearInterval(timerId); 
-      } 
-    }; 
-  }, [gameStarted, timer, points, selectedLevel, palavrasEmJogo, palavrasEncontradas, encontrouPalavra, ganhouJogo]);
-
-  const handleGameStart = () => {
-    if (gameStarted) {
-      setGameStarted(false); 
-
-      setTituloModal("Perdeu");
-      setClasseTextoModal("vermelho");
-      setTextoModal("Pontuação: " + points);
-      setAbreModal(true);
-      
-    } else {
-      setGameStarted(true);
-      setGanhouJogo(false);
-      initJogo(selectedLevel);
-    }
-  };
-
-  function initJogo(dificuldadeAtual){
-
-    let tabelaJogo = [[]];
-    let palavrasEmJogo = [];
-
-    [tabelaJogo, palavrasEmJogo] = initTabelaPalavras(parseInt(dificuldadeAtual), userWords);
-    
-    setTabelaJogo(tabelaJogo);
-    setPalavrasEmJogo(palavrasEmJogo);
-    setPalavrasEncontradas([]);
-    setPoints(0);
-
-  }
-
-  const handleLevelChange = (event) => {
-
-    const { value } = event.currentTarget;
-    setSelectedLevel(value);
-
-    if(value !== '0')
-      initJogo(value);
-  }
+  const [top10, setTop10] = useState([]);
+  const [ganhouJogo, setGanhouJogo] = useState(false);
+  const [points, setPoints] = useState(0);
+  const [inserirTop10, setInserirTop10] = useState(false);
 
   return (
     <div id="container">
@@ -130,17 +33,26 @@ function App() {
       <main className="main-content">
         <ControlPanel
           gameStarted={gameStarted}
-          onGameStart={handleGameStart}
           selectedLevel={selectedLevel}
-          onLevelChange={handleLevelChange}
-          timer={timer}
-          points={points}
-          userWords={userWords}
-          setUserWords={setUserWords}
           setTituloModal={setTituloModal}
           setClasseTextoModal={setClasseTextoModal}
           setTextoModal={setTextoModal}
           setAbreModal={setAbreModal}
+          palavrasEncontradas={palavrasEncontradas}
+          setEncontrouPalavra={setEncontrouPalavra}
+          palavrasEmJogo={palavrasEmJogo}
+          setGameStarted={setGameStarted}
+          setTabelaJogo={setTabelaJogo}
+          setPalavrasEmJogo={setPalavrasEmJogo}
+          setPalavrasEncontradas={setPalavrasEncontradas}
+          setSelectedLevel={setSelectedLevel}
+          encontrouPalavra={encontrouPalavra}
+          ganhouJogo={ganhouJogo}
+          setGanhouJogo={setGanhouJogo}
+          points={points}
+          setPoints={setPoints}
+          top10={top10}
+          setInserirTop10={setInserirTop10}
         />
         <GameWords 
           palavrasEmJogo={palavrasEmJogo}
@@ -151,6 +63,7 @@ function App() {
           gameStarted={gameStarted}
           tabelaJogo={tabelaJogo}
           palavrasEmJogo={palavrasEmJogo}
+          palavrasEncontradas={palavrasEncontradas}
           setPalavrasEncontradas={setPalavrasEncontradas}
           setEncontrouPalavra={setEncontrouPalavra}
           selectedLevel={selectedLevel}
@@ -161,6 +74,11 @@ function App() {
           textoModal={textoModal}
           abreModal={abreModal}
           setAbreModal={setAbreModal}
+          top10={top10}
+          setTop10={setTop10}
+          points={points}
+          inserirTop10={inserirTop10}
+          setInserirTop10={setInserirTop10}
         />
       </main>
       <Footer />

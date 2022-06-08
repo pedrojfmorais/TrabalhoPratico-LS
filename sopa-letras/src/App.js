@@ -1,5 +1,5 @@
 import "./assets/styles/app.css"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   Header,
@@ -26,6 +26,21 @@ function App() {
   const [ganhouJogo, setGanhouJogo] = useState(false);
   const [points, setPoints] = useState(0);
   const [inserirTop10, setInserirTop10] = useState(false);
+
+  useEffect(() => {
+    const items = JSON.parse(localStorage.getItem('top10'));
+
+    let temp = [];
+
+    items.forEach(element => {
+      if(element !== null){
+        temp = [...temp, element];
+      }
+    });
+
+    setTop10(temp);
+    
+  }, []);
 
   return (
     <div id="container">

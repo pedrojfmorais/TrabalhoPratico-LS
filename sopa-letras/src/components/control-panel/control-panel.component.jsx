@@ -65,6 +65,8 @@ function ControlPanel(props) {
     if(timer === -1)
       return;
 
+    setInserirTop10(true);
+
     if(ganhouJogo){
       setTituloModal("Ganhou");
       setClasseTextoModal("verde");
@@ -214,7 +216,7 @@ function ControlPanel(props) {
 
     top10.forEach(element => {
       if(element !== undefined)
-        texto.push("Nome: " + element[0] + " Pontos: " + element[1]);
+        texto.push("Nome: " + element[0] + " | Pontos: " + element[1]);
     });
     setTextoModal(texto);
     setAbreModal(true);

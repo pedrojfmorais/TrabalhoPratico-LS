@@ -49,6 +49,8 @@ function ModalPanel(props) {
 
         setTop10(temp);
 
+        localStorage.setItem('top10', JSON.stringify(temp));
+
         closeModal();
     }
 
@@ -69,30 +71,32 @@ function ModalPanel(props) {
                     <span className="close" onClick={closeModal}>&times;</span>
                     <p className={"modalTitulo " + classeTextoModal}>{tituloModal}</p>
                     {textoModal.map((element, index) => {
-                        return(<p className="modalTexto">{element}</p>);
+                        return(<p className="modalTexto" key={element}>{element}</p>);
                     })}                    
                     {canEnterTop10() && points > 0 && inserirTop10 ?
                         <div>
                             <form className="form" id="addTop10" onSubmit={(event) =>  event.preventDefault()}>
-                                <fieldset className="form-group">
-                                    <label htmlFor="inputNome">Insira o seu nome:</label>
-                                    <input 
-                                    type="text" 
-                                    id="inputNome" 
-                                    name="inputNome" 
-                                    placeholder="Nome" 
-                                    onChange={onInputChange}
-                                    onKeyDown={(event) => {if(event.key === 'Enter') addToTop10(); }}
-                                    value={nome}
-                                    ></input>
-                                    <button
-                                    type="button"
-                                    id="btAddNome"
-                                    onClick={() => addToTop10()}
-                                    >
-                                    Adicionar
-                                    </button>
-                                </fieldset>
+                                <div>
+                                    <label htmlFor="inputNome">Guarde o seu score:</label>
+                                    <div>
+                                        <input 
+                                        type="text" 
+                                        id="inputNome" 
+                                        name="inputNome" 
+                                        placeholder="Nome" 
+                                        onChange={onInputChange}
+                                        onKeyDown={(event) => {if(event.key === 'Enter') addToTop10(); }}
+                                        value={nome}
+                                        ></input>
+                                        <button
+                                        type="button"
+                                        id="btAddNome"
+                                        onClick={() => addToTop10()}
+                                        >
+                                        Adicionar
+                                        </button>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     :

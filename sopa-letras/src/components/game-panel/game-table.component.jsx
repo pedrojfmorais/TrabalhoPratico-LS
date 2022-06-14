@@ -14,17 +14,15 @@ function GameTable(props) {
   let tabelaJogoTemp = tabelaJogo;
 
   function selecionaLetra(event) {
-    event.currentTarget.className = "- highlighted";
+    event.currentTarget.className = "highlighted";
     tabelaJogoTemp = tabelaJogoTemp.map((linha, index_linha) => {
-      let l = linha.map((coluna, index_coluna) => {
+      return linha.map((coluna, index_coluna) => {
         let id = index_linha + " " + index_coluna;
-        let c = coluna;
         if(id === event.currentTarget.id){
-          c.isHighlighted = true;
+          coluna.isHighlighted = true;
         }
-        return c;
+        return coluna;
       });
-      return l;
     });
     palavraSelecionada += event.currentTarget.innerText;
   }

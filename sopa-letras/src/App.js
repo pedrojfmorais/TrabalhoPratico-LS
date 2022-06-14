@@ -29,20 +29,20 @@ function App() {
 
   const [value, setValue] = useState(0);
 
-  // useEffect(() => {
-  //   const items = JSON.parse(localStorage.getItem('top10'));
-  //   console.log(items);
-  //   let temp = [];
+  useEffect(() => {
+    const items = JSON.parse(localStorage.getItem('top10'));
+    console.log(items);
+    let temp = [];
 
-  //   items.forEach(element => {
-  //     if(element !== null){
-  //       temp = [...temp, element];
-  //     }
-  //   });
+    items.forEach(element => {
+      if(element !== null){
+        temp = [...temp, element];
+      }
+    });
 
-  //   setTop10(temp);
+    setTop10(temp);
     
-  // }, []);
+  }, []);
 
   return (
     <div id="container">

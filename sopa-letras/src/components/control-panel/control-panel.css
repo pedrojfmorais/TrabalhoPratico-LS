@@ -109,6 +109,7 @@
 
 #gameTime,
 #points {
+  background-color: grey;
   color: white;
   font-weight: bolder;
   margin-left: 5px;
@@ -117,7 +118,6 @@
   display: inline-block;
 }
 #points {
-  background-color: grey;
   width: 25px;
   text-align: right;
   background-color: transparent;
@@ -193,12 +193,21 @@ button:hover {
   background: rgba(0, 0, 0, 0.1);
   background:darkorange;
 }
-.greyBg {
-  background-color: grey;
+#gameTime {
+  background-color: var(--timer-color);
 }
-.goldBg {
-  background-color: gold;
+
+#btTop {
+  margin-left: 10px;
+  border: 1px solid #5e5858;
+  background-color:mediumpurple;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
+  justify-self: end;
+  align-self: right;
 }
-.redBg {
-  background-color: red;
+#btTop:hover {
+  background: rgba(0, 0, 0, 0.1);
+  background:purple;
 }

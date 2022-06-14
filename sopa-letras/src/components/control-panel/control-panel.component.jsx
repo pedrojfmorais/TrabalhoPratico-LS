@@ -1,27 +1,133 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./control-panel.css";
 import { PALAVRAS_POSSIVEIS, TEMPO_DIFICULDADE } from "../../constants";
+import { initTabelaPalavras } from "../../helpers";
 
 function ControlPanel(props) {
 
-  const { gameStarted, selectedLevel, onGameStart, onLevelChange, timer, points, 
-    userWords, setUserWords, setTituloModal, setClasseTextoModal, setTextoModal, setAbreModal } = props;
+  const { 
+    gameStarted, selectedLevel, setTituloModal, setClasseTextoModal, setTextoModal, ganhouJogo, points,
+    setAbreModal, palavrasEncontradas, palavrasEmJogo, setGameStarted, setTabelaJogo, setGanhouJogo, setPoints,
+    setPalavrasEmJogo, setPalavrasEncontradas, setSelectedLevel, encontrouPalavra, setEncontrouPalavra, top10, setInserirTop10
+  } = props;
 
+  const [timer, setTimer] = useState(-1);
   const gameStartedClass = gameStarted ? " gameStarted" : "";
 
   const [word, setWord] = useState("");
   const [btnReset, setBtnReset] = useState("Reset");
+  const [userWords, setUserWords] = useState([]);
+ 
+  const onGameStart = () => {
+    if (gameStarted) {
+      
+      setInserirTop10(true);
 
-  const colorBg = 
-  timer <= TEMPO_DIFICULDADE[parseInt(selectedLevel)-1] / 4 ? 
-    "redBg" 
-  : 
-    (
-      timer <= TEMPO_DIFICULDADE[parseInt(selectedLevel)-1] / 2 ? 
-        "goldBg"
-      :
-        "greyBg"  
-    );
+      setGameStarted(false); 
+
+      setTituloModal("Perdeu");
+      setClasseTextoModal("vermelho");
+      setTextoModal(["Pontuação: " + points]);
+      setAbreModal(true);
+      
+    } else {
+      setGameStarted(true);
+      setGanhouJogo(false);
+      initJogo(selectedLevel);
+    }
+  };
+
+  function initJogo(dificuldadeAtual){
+
+    let tabelaJogo = [[]];
+    let palavrasEmJogo = [];
+
+    [tabelaJogo, palavrasEmJogo] = initTabelaPalavras(parseInt(dificuldadeAtual), userWords);
+    
+    setTabelaJogo(tabelaJogo);
+    setPalavrasEmJogo(palavrasEmJogo);
+    setPalavrasEncontradas([]);
+    setPoints(0);
+
+  }
+
+  const onLevelChange = (event) => {
+
+    const { value } = event.currentTarget;
+    setSelectedLevel(value);
+
+    if(value !== '0')
+      initJogo(value);
+  }
+
+  function terminouJogo(){
+
+    if(timer === -1)
+      return;
+
+    setInserirTop10(true);
+
+    if(ganhouJogo){
+      setTituloModal("Ganhou");
+      setClasseTextoModal("verde");
+    }
+    else{
+      setTituloModal("Perdeu");
+      setClasseTextoModal("vermelho");
+    }
+    setTextoModal(["Pontuação: " + points]);
+    setAbreModal(true);
+  }
+
+  useEffect(() => { 
+    
+    let timerId = undefined;
+
+    if (gameStarted) { 
+      timerId = setInterval(() => { 
+        setTimer(timer-1); 
+        let nextTimer = timer - 1; 
+        if (nextTimer === 0) { 
+          setGameStarted(false); 
+          setGanhouJogo(false);
+          terminouJogo();
+        }
+
+      }, 1000); 
+    } else if (timer !== TEMPO_DIFICULDADE[parseInt(selectedLevel)-1]) { 
+      setTimer(TEMPO_DIFICULDADE[parseInt(selectedLevel)-1]); 
+    } 
+    return () => { 
+      if (timerId) { 
+        clearInterval(timerId); 
+      } 
+    }; 
+  }, [gameStarted, timer, selectedLevel]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    
+    //atualizar pontos
+    if(encontrouPalavra){
+      setPoints(points + (palavrasEncontradas[palavrasEncontradas.length-1].length * timer));
+      setEncontrouPalavra(false);
+
+    }
+
+    //fim de jogo
+    if(palavrasEmJogo.length === palavrasEncontradas.length && timer > 0){
+      setGameStarted(false);
+      setGanhouJogo(true);
+      terminouJogo();
+    }
+  }, [encontrouPalavra]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // cor do timer conforme o tempo que falta
+  if(timer <= TEMPO_DIFICULDADE[parseInt(selectedLevel)-1] / 4)
+    document.documentElement.style.setProperty('--timer-color', 'red');
+  else if(timer <= TEMPO_DIFICULDADE[parseInt(selectedLevel)-1] / 2)
+    document.documentElement.style.setProperty('--timer-color', 'gold');
+  else
+    document.documentElement.style.setProperty('--timer-color', 'grey');
 
   const addWord = () => {
 
@@ -34,7 +140,7 @@ function ControlPanel(props) {
       
       setTituloModal("Erro");
       setClasseTextoModal("vermelho");
-      setTextoModal("Esta palavra já se encontra inserida!");
+      setTextoModal(["Esta palavra já se encontra inserida!"]);
       setAbreModal(true);
 
       return;
@@ -76,15 +182,13 @@ function ControlPanel(props) {
     if(event.key === 'Enter') 
       addWord(); 
   }
-  
-  const submeterWord = event => event.preventDefault();  
 
   const mostraPalavras = () => {
 
     if(userWords.length === 0){
       setTituloModal("Ainda não foram inseridas palavras");
       setClasseTextoModal("vermelho");
-      setTextoModal("");
+      setTextoModal([""]);
 
     }else{
 
@@ -97,15 +201,30 @@ function ControlPanel(props) {
           texto += element + ", ";
         });
 
-        setTextoModal(texto.substring(0, texto.length - 2));
+        setTextoModal([texto.substring(0, texto.length - 2)]);
     }
 
     setAbreModal(true);
   }
 
+  const mostraTop10 = () => {
+
+    let texto = [];
+
+    setTituloModal("Top 10 Pontuações");
+    setClasseTextoModal("verde");
+
+    top10.forEach(element => {
+      if(element !== undefined)
+        texto.push("Nome: " + element[0] + " | Pontos: " + element[1]);
+    });
+    setTextoModal(texto);
+    setAbreModal(true);
+  }
+
   return (
     <section id="panel-control">
-      <form className="form">
+      <form className="form" onSubmit={event => event.preventDefault()}>
             <fieldset className="form-group">
               <label htmlFor="btLevel">Nível:</label>
               <select
@@ -120,6 +239,7 @@ function ControlPanel(props) {
                 <option value="3">Avançado (20x20, 9 palavras)</option>
               </select>
             </fieldset>
+            <fieldset className="form-group">
             <button
               type="button"
               id="btPlay"
@@ -128,10 +248,12 @@ function ControlPanel(props) {
             >
               {gameStarted ? "Parar jogo" : "Iniciar Jogo"}
             </button>
+            <button id="btTop" onClick={mostraTop10}>Ver TOP 10</button>
+            </fieldset>
       </form>
 
       {!gameStarted ? 
-        <form className="form" id="addWords" onSubmit={submeterWord}>
+        <form className="form" id="addWords" onSubmit={event => event.preventDefault()}>
           <fieldset className="form-group">
             <label htmlFor="inputPalavra">Palavras:</label>
             <input 
@@ -176,7 +298,7 @@ function ControlPanel(props) {
         <div className="inGameInfo">
           <dl className={`list-item left${gameStartedClass}`}>
             <dt>Tempo de Jogo:</dt>
-            <dd id="gameTime" className={colorBg}>{timer}</dd>
+            <dd id="gameTime">{timer}</dd>
           </dl>
           <dl className={`list-item right${gameStartedClass}`}>
             <dt>Pontuação:</dt>

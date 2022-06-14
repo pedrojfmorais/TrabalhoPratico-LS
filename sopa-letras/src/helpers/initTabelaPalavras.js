@@ -185,20 +185,6 @@ function geraComoColocarNaTabela(tabelaJogoTemp, palavras, dificuldadeAtual){
     return tabelaJogoTemp;
 }
 
-function trocaLetraPorObjeto(tabelaJogoTemp){
-
-    tabelaJogoTemp = tabelaJogoTemp.map((linha, index_linha) => (
-        linha.map((coluna, index_coluna) => (
-            {
-                letra: coluna,
-                isHighlighted: false,
-                isCorrect: false
-            }
-        ))
-    ));
-    return tabelaJogoTemp;
-}
-
 function colocaPalavrasTabelaJogo(dificuldadeAtual, tabelaJogoTemp, palavrasEmJogo, palavrasUtilizador){
 
     if (dificuldadeAtual === 0)
@@ -213,12 +199,13 @@ function colocaPalavrasTabelaJogo(dificuldadeAtual, tabelaJogoTemp, palavrasEmJo
 
     tabelaJogoTemp = preencheTabelaJogoComLetrasRandom(tabelaJogoTemp, dificuldadeAtual);
 
-    tabelaJogoTemp = trocaLetraPorObjeto(tabelaJogoTemp);
-
     return [tabelaJogoTemp, palavrasEmJogo];
 }
 
 function initTabelaPalavras(dificuldadeAtual, palavrasUtilizador){
+
+    Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
+    Array.from(document.querySelectorAll('.palavraCerta')).forEach((el) => el.classList.remove('palavraCerta'));
 
     let tabelaJogoTemp = [[]];
     let palavrasEmJogo = [];  

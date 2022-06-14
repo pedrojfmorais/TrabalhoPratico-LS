@@ -1,49 +1,18 @@
-import React, { memo } from "react";
+import React from "react";
 import "./game-panel.css"
-import Letter from "../letter/letter.component";
 
-function GameTable(props){
+function GameTable(props) {
 
-  let { gameStarted, tabelaJogo, palavrasEmJogo, setPalavrasEncontradas, setEncontrouPalavra, selectedLevel } = props;
+  let { gameStarted, tabelaJogo, palavrasEmJogo, palavrasEncontradas, setPalavrasEncontradas, setEncontrouPalavra, selectedLevel } = props;
 
   let mouseDown = false;
   let palavraSelecionada = "";
   let letrasSelecionadas = [];
-  let palavrasEncontradas = [];
   let direcaoAtual = 0;
   let direcaoSelecao = 0;
 
   function selecionaLetra(event) {
     event.currentTarget.className += " highlighted";
-    let tabelaJogoTemp = tabelaJogo;
-
-    for (let index_linha = 0; index_linha < tabelaJogoTemp.length; index_linha++) {
-      for (let index_coluna = 0; index_coluna < tabelaJogoTemp[index_linha].length; index_coluna++) {
-        
-        let id = index_linha + " " + index_coluna;
-        if(id === event.currentTarget.id){
-          tabelaJogoTemp[index_linha][index_coluna].isHighlighted = true;
-          console.log(tabelaJogoTemp[index_linha][index_coluna]);
-        }
-      }
-    }
-    console.log(tabelaJogoTemp);
-
-    // tabelaJogoTemp = tabelaJogo.map((linha, index_linha) => {
-    //   let l = linha.map((coluna, index_coluna) => {
-    //     let id = index_linha + " " + index_coluna;
-    //     let c = coluna;
-    //     if(id === event.currentTarget.id){
-    //       c.isHighlighted = true;
-    //       console.log(c);
-    //     }
-    //     return c;
-    //   });
-    //   console.log(l);
-    //   return l;
-    // });
-    // console.log(tabelaJogo);
-    // console.log(tabelaJogoTemp);
     palavraSelecionada += event.currentTarget.innerText;
   }
 
@@ -58,6 +27,7 @@ function GameTable(props){
       if(letrasSelecionadas.length === 0){
         letrasSelecionadas.push([linha, coluna]);
         selecionaLetra(event);
+      
       } else {
         // verifica se está na horizontal, vertical ou diagonal (variável direcaoAtual valores (1, 2, 3) respetivamente)
         //  depois verifica para qual lado está a andar (variável direcaoSelecao)
@@ -184,39 +154,23 @@ function GameTable(props){
       }
     }
     
-    let encontrouPalavra = false;
+    let elements=document.getElementsByClassName("highlighted");
 
-    tabelaJogo = tabelaJogo.map((linha, index_linha) => (
-      linha.map((coluna, index_coluna) => {
-        if(palavraCerta && coluna.isHighlighted){
-          coluna.isCorrect = true;
-          palavrasEncontradas.push(palavra);
-          setPalavrasEncontradas(palavrasEncontradas);
-          setEncontrouPalavra(true);
-          encontrouPalavra = true;
-        }
-        coluna.isHighlighted = false;
-        return coluna;
-      })
-    ));
-    if(!encontrouPalavra)
-      setEncontrouPalavra(false);
-    // let elements=document.getElementsByClassName("highlighted");
+    if(palavraCerta){
+      for (let index = 0; index < elements.length; index++) {
+        elements[index].classList.add("palavraCerta");
+      }
+      setPalavrasEncontradas([...palavrasEncontradas, palavra]);
+      setEncontrouPalavra(true);
+    }
 
-    // if(palavraCerta){
-    //   for (let index = 0; index < elements.length; index++) {
-    //     elements[index].classList.add("palavraCerta");
-    //   }
-      
-    // }
-
-    // Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
+    Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
 
   }
 
   return (
     <div>
-      {/* só mostra a tabela se estiver algum nivel selecionado*/}
+      {/* só mostra a tabela se estiver algum nivel selecionado */}
       {selectedLevel !== '0' ?
         <div>
           <br></br>
@@ -227,15 +181,9 @@ function GameTable(props){
               {tabelaJogo.map((items, index_linha) => {
                 return (
                   <tr key={index_linha}>
-                    {items.map((item, index) => (
-                      <Letter 
-                        key={index_linha + ' ' + index}
-                        index_linha={index_linha}
-                        index={index}
-                        selectedCell={selectedCell}
-                        item={item}
-                      />
-                    ))}
+                    {items.map((item, index) => {
+                      return (<td id={index_linha + ' ' + index} key={index_linha + ' ' + index} onMouseMove={selectedCell}>{item}</td>);
+                    })}
                   </tr>
                 );
               })}

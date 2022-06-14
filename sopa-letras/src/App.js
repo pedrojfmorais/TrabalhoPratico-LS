@@ -29,7 +29,7 @@ function App() {
   const [classeTextoModal, setClasseTextoModal] = useState("");
   const [abreModal, setAbreModal] = useState(false);
   const [userWords, setUserWords] = useState([]);
-
+/*
   useEffect(() => { 
     
     let timerId = undefined;
@@ -84,7 +84,7 @@ function App() {
       } 
     }; 
   }, [gameStarted, timer, points, selectedLevel, palavrasEmJogo, palavrasEncontradas, encontrouPalavra, ganhouJogo]);
-
+*/
   const handleGameStart = () => {
     if (gameStarted) {
       setGameStarted(false); 

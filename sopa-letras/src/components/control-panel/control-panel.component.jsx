@@ -12,13 +12,16 @@ function ControlPanel(props) {
   const [word, setWord] = useState("");
   const [btnReset, setBtnReset] = useState("Reset");
 
-  // cor do timer conforme o tempo que falta
-  if(timer <= TEMPO_DIFICULDADE[parseInt(selectedLevel)-1] / 4)
-    document.documentElement.style.setProperty('--timer-color', 'red');
-  else if(timer <= TEMPO_DIFICULDADE[parseInt(selectedLevel)-1] / 2)
-    document.documentElement.style.setProperty('--timer-color', 'gold');
-  else
-    document.documentElement.style.setProperty('--timer-color', 'grey');
+  const colorBg = 
+  timer <= TEMPO_DIFICULDADE[parseInt(selectedLevel)-1] / 4 ? 
+    "redBg" 
+  : 
+    (
+      timer <= TEMPO_DIFICULDADE[parseInt(selectedLevel)-1] / 2 ? 
+        "goldBg"
+      :
+        "greyBg"  
+    );
 
   const addWord = () => {
 
@@ -173,7 +176,7 @@ function ControlPanel(props) {
         <div className="inGameInfo">
           <dl className={`list-item left${gameStartedClass}`}>
             <dt>Tempo de Jogo:</dt>
-            <dd id="gameTime">{timer}</dd>
+            <dd id="gameTime" className={colorBg}>{timer}</dd>
           </dl>
           <dl className={`list-item right${gameStartedClass}`}>
             <dt>Pontuação:</dt>

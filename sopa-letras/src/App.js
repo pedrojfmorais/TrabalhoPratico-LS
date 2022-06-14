@@ -27,6 +27,8 @@ function App() {
   const [points, setPoints] = useState(0);
   const [inserirTop10, setInserirTop10] = useState(false);
 
+  const [value, setValue] = useState(0);
+
   // useEffect(() => {
   //   const items = JSON.parse(localStorage.getItem('top10'));
   //   console.log(items);
@@ -77,11 +79,14 @@ function App() {
         <GameTable 
           gameStarted={gameStarted}
           tabelaJogo={tabelaJogo}
+          setTabelaJogo={setTabelaJogo}
           palavrasEmJogo={palavrasEmJogo}
           palavrasEncontradas={palavrasEncontradas}
           setPalavrasEncontradas={setPalavrasEncontradas}
           setEncontrouPalavra={setEncontrouPalavra}
           selectedLevel={selectedLevel}
+          value={value}
+          setValue={setValue}
         />
         <ModalPanel 
           classeTextoModal={classeTextoModal}

@@ -4,31 +4,28 @@ import Letter from "../letter/letter.component";
 
 function GameTable(props) {
 
-  let { gameStarted, tabelaJogo, palavrasEmJogo, palavrasEncontradas, setPalavrasEncontradas, setEncontrouPalavra, selectedLevel } = props;
+  let { gameStarted, tabelaJogo, setTabelaJogo, palavrasEmJogo, palavrasEncontradas, setPalavrasEncontradas, setEncontrouPalavra, selectedLevel } = props;
 
   let mouseDown = false;
   let palavraSelecionada = "";
   let letrasSelecionadas = [];
   let direcaoAtual = 0;
   let direcaoSelecao = 0;
+  let tabelaJogoTemp = tabelaJogo;
 
   function selecionaLetra(event) {
-    event.currentTarget.className += " highlighted";
-    let tabelaJogoTemp = tabelaJogo.map((linha, index_linha) => {
+    event.currentTarget.className = "- highlighted";
+    tabelaJogoTemp = tabelaJogoTemp.map((linha, index_linha) => {
       let l = linha.map((coluna, index_coluna) => {
         let id = index_linha + " " + index_coluna;
         let c = coluna;
         if(id === event.currentTarget.id){
           c.isHighlighted = true;
-          console.log(c);
         }
         return c;
       });
-      console.log(l);
       return l;
     });
-    // console.log(tabelaJogo);
-    console.log(tabelaJogoTemp);
     palavraSelecionada += event.currentTarget.innerText;
   }
 
@@ -143,6 +140,12 @@ function GameTable(props) {
 
   const onMouseDown = () => {
     mouseDown=true;
+    tabelaJogoTemp = tabelaJogoTemp.map((linha, index_linha) => (
+      linha.map((coluna, index_coluna) => {
+        coluna.isHighlighted = false;
+        return coluna;
+      })
+    ));
   }
   const onMouseUp = () => {
     mouseDown=false;
@@ -151,6 +154,7 @@ function GameTable(props) {
     letrasSelecionadas = [];
     direcaoAtual = 0;
     direcaoSelecao = 0;
+    setTabelaJogo(tabelaJogoTemp);
   }
 
   const onPalavraSelecionada = (palavra) => {
@@ -170,37 +174,19 @@ function GameTable(props) {
       }
     }
     
-    let encontrouPalavra = false;
-
-    tabelaJogo = tabelaJogo.map((linha, index_linha) => (
+    tabelaJogoTemp = tabelaJogoTemp.map((linha, index_linha) => (
       linha.map((coluna, index_coluna) => {
         if(palavraCerta && coluna.isHighlighted){
           coluna.isCorrect = true;
-          palavrasEncontradas.push(palavra);
-          setPalavrasEncontradas(palavrasEncontradas);
+          setPalavrasEncontradas([...palavrasEncontradas, palavra]);
           setEncontrouPalavra(true);
-          encontrouPalavra = true;
         }
-        coluna.isHighlighted = false;
         return coluna;
       })
     ));
-    if(!encontrouPalavra)
-      setEncontrouPalavra(false);
-    // let elements=document.getElementsByClassName("highlighted");
-
-    // if(palavraCerta){
-    //   for (let index = 0; index < elements.length; index++) {
-    //     elements[index].classList.add("palavraCerta");
-    //   }
-    //   setPalavrasEncontradas([...palavrasEncontradas, palavra]);
-    //   setEncontrouPalavra(true);
-    // }
-
-    // Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
-
+    setTabelaJogo(tabelaJogoTemp);
   }
-
+  
   return (
     <div>
       {/* só mostra a tabela se estiver algum nivel selecionado */}

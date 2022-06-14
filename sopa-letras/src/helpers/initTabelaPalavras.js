@@ -202,15 +202,27 @@ function colocaPalavrasTabelaJogo(dificuldadeAtual, tabelaJogoTemp, palavrasEmJo
     return [tabelaJogoTemp, palavrasEmJogo];
 }
 
-function initTabelaPalavras(dificuldadeAtual, palavrasUtilizador){
+function trocaLetraPorObjeto(tabelaJogoTemp){
 
-    Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
-    Array.from(document.querySelectorAll('.palavraCerta')).forEach((el) => el.classList.remove('palavraCerta'));
+    tabelaJogoTemp = tabelaJogoTemp.map((linha, index_linha) => (
+        linha.map((coluna, index_coluna) => (
+            {
+                letra: coluna,
+                isHighlighted: false,
+                isCorrect: false
+            }
+        ))
+    ));
+    return tabelaJogoTemp;
+}
+
+function initTabelaPalavras(dificuldadeAtual, palavrasUtilizador){
 
     let tabelaJogoTemp = [[]];
     let palavrasEmJogo = [];  
 
     [tabelaJogoTemp, palavrasEmJogo] = colocaPalavrasTabelaJogo(dificuldadeAtual, tabelaJogoTemp, palavrasEmJogo, palavrasUtilizador);
+    tabelaJogoTemp = trocaLetraPorObjeto(tabelaJogoTemp);
     
     return [tabelaJogoTemp, palavrasEmJogo];
 }

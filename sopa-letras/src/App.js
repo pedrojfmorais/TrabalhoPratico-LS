@@ -27,20 +27,20 @@ function App() {
   const [points, setPoints] = useState(0);
   const [inserirTop10, setInserirTop10] = useState(false);
 
-  useEffect(() => {
-    const items = JSON.parse(localStorage.getItem('top10'));
+  // useEffect(() => {
+  //   const items = JSON.parse(localStorage.getItem('top10'));
+  //   console.log(items);
+  //   let temp = [];
 
-    let temp = [];
+  //   items.forEach(element => {
+  //     if(element !== null){
+  //       temp = [...temp, element];
+  //     }
+  //   });
 
-    items.forEach(element => {
-      if(element !== null){
-        temp = [...temp, element];
-      }
-    });
-
-    setTop10(temp);
+  //   setTop10(temp);
     
-  }, []);
+  // }, []);
 
   return (
     <div id="container">

@@ -1,5 +1,6 @@
 import React from "react";
 import "./game-panel.css"
+import Letter from "../letter/letter.component";
 
 function GameTable(props) {
 
@@ -13,6 +14,21 @@ function GameTable(props) {
 
   function selecionaLetra(event) {
     event.currentTarget.className += " highlighted";
+    let tabelaJogoTemp = tabelaJogo.map((linha, index_linha) => {
+      let l = linha.map((coluna, index_coluna) => {
+        let id = index_linha + " " + index_coluna;
+        let c = coluna;
+        if(id === event.currentTarget.id){
+          c.isHighlighted = true;
+          console.log(c);
+        }
+        return c;
+      });
+      console.log(l);
+      return l;
+    });
+    // console.log(tabelaJogo);
+    console.log(tabelaJogoTemp);
     palavraSelecionada += event.currentTarget.innerText;
   }
 
@@ -154,17 +170,34 @@ function GameTable(props) {
       }
     }
     
-    let elements=document.getElementsByClassName("highlighted");
+    let encontrouPalavra = false;
 
-    if(palavraCerta){
-      for (let index = 0; index < elements.length; index++) {
-        elements[index].classList.add("palavraCerta");
-      }
-      setPalavrasEncontradas([...palavrasEncontradas, palavra]);
-      setEncontrouPalavra(true);
-    }
+    tabelaJogo = tabelaJogo.map((linha, index_linha) => (
+      linha.map((coluna, index_coluna) => {
+        if(palavraCerta && coluna.isHighlighted){
+          coluna.isCorrect = true;
+          palavrasEncontradas.push(palavra);
+          setPalavrasEncontradas(palavrasEncontradas);
+          setEncontrouPalavra(true);
+          encontrouPalavra = true;
+        }
+        coluna.isHighlighted = false;
+        return coluna;
+      })
+    ));
+    if(!encontrouPalavra)
+      setEncontrouPalavra(false);
+    // let elements=document.getElementsByClassName("highlighted");
 
-    Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
+    // if(palavraCerta){
+    //   for (let index = 0; index < elements.length; index++) {
+    //     elements[index].classList.add("palavraCerta");
+    //   }
+    //   setPalavrasEncontradas([...palavrasEncontradas, palavra]);
+    //   setEncontrouPalavra(true);
+    // }
+
+    // Array.from(document.querySelectorAll('.highlighted')).forEach((el) => el.classList.remove('highlighted'));
 
   }
 
@@ -181,9 +214,15 @@ function GameTable(props) {
               {tabelaJogo.map((items, index_linha) => {
                 return (
                   <tr key={index_linha}>
-                    {items.map((item, index) => {
-                      return (<td id={index_linha + ' ' + index} key={index_linha + ' ' + index} onMouseMove={selectedCell}>{item}</td>);
-                    })}
+                    {items.map((item, index) => (
+                      <Letter 
+                        key={index_linha + ' ' + index}
+                        index_linha={index_linha}
+                        index={index}
+                        selectedCell={selectedCell}
+                        item={item}
+                      />
+                    ))}
                   </tr>
                 );
               })}

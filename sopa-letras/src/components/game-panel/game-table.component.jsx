@@ -216,7 +216,7 @@ function GameTable(props){
 
   return (
     <div>
-      {/* só mostra a tabela se estiver algum nivel selecionado */}
+      {/* só mostra a tabela se estiver algum nivel selecionado*/}
       {selectedLevel !== '0' ?
         <div>
           <br></br>

@@ -31,14 +31,15 @@ function App() {
 
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem('top10'));
-    console.log(items);
     let temp = [];
 
-    items.forEach(element => {
-      if(element !== null){
-        temp = [...temp, element];
-      }
-    });
+    if(items !== null){
+      items.forEach(element => {
+        if(element !== null){
+          temp = [...temp, element];
+        }
+      });
+    }
 
     setTop10(temp);
     

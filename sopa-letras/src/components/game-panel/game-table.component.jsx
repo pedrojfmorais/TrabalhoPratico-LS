@@ -42,7 +42,7 @@ function GameTable(props) {
       } else {
         // verifica se está na horizontal, vertical ou diagonal (variável direcaoAtual valores (1, 2, 3) respetivamente)
         //  depois verifica para qual lado está a andar (variável direcaoSelecao)
-          // horizonatal - direita ou esquerda valores (1, 2) respetivamente
+          // horizontal - direita ou esquerda valores (1, 2) respetivamente
           // vertical - baixo ou cima valores (1, 2) respetivamente
           // diagonal - baixo e direita, baixo e esquerda, cima e direita ou cima e esquerda valores (1, 2, 3, 4) respetivamente
         if(linha === letrasSelecionadas[0][0] && (direcaoAtual === 0 || direcaoAtual === 1)){

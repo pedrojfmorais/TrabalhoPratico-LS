@@ -49,9 +49,9 @@ function geraPalavrasRandom(dificuldadeAtual, palavrasUtilizador){
             novaPalavra = true;
             for (let index = 0; index < palavras.length; index++)
                 if(palavras[index] === palavra || palavra.length > NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1]){
-                novaPalavra = false;
-                palavra = getRandomWord(palavrasUtilizador);
-                break;
+                    novaPalavra = false;
+                    palavra = getRandomWord(palavrasUtilizador);
+                    break;
                 }
                 
             if(novaPalavra)
@@ -126,49 +126,48 @@ function geraComoColocarNaTabela(tabelaJogoTemp, palavras, dificuldadeAtual){
                 case 1:
                 // cima baixo
 
-                if(linha + palavra.length >= NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1])
-                    linha = NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1] - palavra.length;
+                    if(linha + palavra.length >= NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1])
+                        linha = NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1] - palavra.length;
 
-                for (let index = 0; index < palavra.length; index++)
-                    celulasOcupadasParaEste.push([linha+index, coluna]);
-                break;
+                    for (let index = 0; index < palavra.length; index++)
+                        celulasOcupadasParaEste.push([linha+index, coluna]);
+                    break;
 
                 case 2:
                 // diagonal esquerda cima -> direita baixo
 
-                if(linha + palavra.length >= NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1])
-                    linha = NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1] - palavra.length;
+                    if(linha + palavra.length >= NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1])
+                        linha = NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1] - palavra.length;
 
-                if(coluna + palavra.length >= NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1])
-                    coluna = NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1] - palavra.length;
-                    
-                for (let index = 0; index < palavra.length; index++)
-                    celulasOcupadasParaEste.push([linha+index, coluna+index]);
-                break;
+                    if(coluna + palavra.length >= NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1])
+                        coluna = NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1] - palavra.length;
+                        
+                    for (let index = 0; index < palavra.length; index++)
+                        celulasOcupadasParaEste.push([linha+index, coluna+index]);
+                    break;
 
                 case 3:
                 // diagonal esquerda baixo -> direita cima
                 
-                if(linha - palavra.length <= -1)
-                    linha = palavra.length - 1; // porque o index começa em 0
+                    if(linha - palavra.length <= -1)
+                        linha = palavra.length - 1; // porque o index começa em 0
 
-                if(coluna + palavra.length >= NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1])
-                    coluna = NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1] - palavra.length;
+                    if(coluna + palavra.length >= NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1])
+                        coluna = NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1] - palavra.length;
 
-                    
-                for (let index = 0; index < palavra.length; index++) 
-                    celulasOcupadasParaEste.push([linha-index, coluna+index]);
-                break;
+                        
+                    for (let index = 0; index < palavra.length; index++) 
+                        celulasOcupadasParaEste.push([linha-index, coluna+index]);
+                    break;
 
                 default:
                 // esquerda direita
+                    if(coluna + palavra.length >= NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1])
+                        coluna = NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1] - palavra.length;
 
-                if(coluna + palavra.length >= NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1])
-                    coluna = NUMERO_LINHAS_DIFICULDADE[dificuldadeAtual-1] - palavra.length;
-
-                for (let index = 0; index < palavra.length; index++)
-                    celulasOcupadasParaEste.push([linha, coluna+index]);
-                break;
+                    for (let index = 0; index < palavra.length; index++)
+                        celulasOcupadasParaEste.push([linha, coluna+index]);
+                    break;
             }
             for (let letra = 0; letra < celulasOcupadasParaEste.length; letra++) {
                 if(tabelaJogoTemp[celulasOcupadasParaEste[letra][0]][celulasOcupadasParaEste[letra][1]] !== ' '){
